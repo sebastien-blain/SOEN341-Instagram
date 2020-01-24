@@ -8,7 +8,7 @@ Fixes # (issue)
 
 Please delete options that are not relevant.
 
-- [ ] FIXS (Fixing or documenting a bug)
+- [ ] BUG (Fixing or documenting a bug)
 - [ ] FEAT (Add a new feature to the project)
 - [ ] CHORE (Something that needs to be done outside of the issue)
 - [ ] DOCS (Implement documentation)
