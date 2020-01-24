@@ -7,9 +7,9 @@ Develop an Instagram-plus web page.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque habitant morbi tristique senectus et netus et. At imperdiet dui accumsan sit amet nulla facilisi. Sed felis eget velit aliquet sagittis. Sed velit dignissim sodales ut eu sem. Molestie nunc non blandit massa enim nec. Ut sem nulla pharetra diam. Sed enim ut sem viverra aliquet eget. Ultrices dui sapien eget mi proin. Ipsum dolor sit amet consectetur adipiscing elit ut. Amet risus nullam eget felis eget nunc. 
 
 ## Core features
-1. Post a picture on your account
-2. Like a picture
-3. Follow another user
+1. Posting a picture (with text description)
+2. Following a user
+3. Leave comments to a posted picture
 
 ## Additional features
 1. Cannot repost a picture that was already posted by someone else
