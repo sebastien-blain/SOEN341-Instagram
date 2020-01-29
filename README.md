@@ -24,7 +24,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 * Sébastien Blain-Nadeau - https://github.com/Sebastien0730
 * Phong Le - https://github.com/phong1233
 * David Thaï - https://github.com/davidthai0387
-* Cheikh Diagne - https://github.com/
+* Cheikh Diagne - https://github.com/cheikhd97
 * Nafissa ... - https://github.com/
 * Julien Xu - https://github.com/
 
