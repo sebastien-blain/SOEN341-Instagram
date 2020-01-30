@@ -4,7 +4,7 @@
 Develop an Instagram-plus web page.
 
 ## Description
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque habitant morbi tristique senectus et netus et. At imperdiet dui accumsan sit amet nulla facilisi. Sed felis eget velit aliquet sagittis. Sed velit dignissim sodales ut eu sem. Molestie nunc non blandit massa enim nec. Ut sem nulla pharetra diam. Sed enim ut sem viverra aliquet eget. Ultrices dui sapien eget mi proin. Ipsum dolor sit amet consectetur adipiscing elit ut. Amet risus nullam eget felis eget nunc. 
+The goal of the project is to develop a simplified version of the Instagram application. The implementation of the application will have to include the core features of Instagram. Those features are going to be listed down below. While also adding the 3 basic features, we will have to come up with a new feature to add to the infrastructure of our web app. Our new feature will have to do with the reposting of pictures. It will explained in more detail, in a different section of the README. The list of technologies that will be used are also listed down below. That list will be continually updated as we determine how we will develop our web app.
 
 ## Core features
 1. Posting a picture (with text description)
@@ -12,7 +12,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 3. Leave comments to a posted picture
 
 ## Additional features
-1. Cannot repost a picture that was already posted by someone else
+1. Cannot repost a picture without crediting the original post
 
 
 ## Technologies
