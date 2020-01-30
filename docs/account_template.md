@@ -13,6 +13,7 @@ Account will be store in the database using this template
       "url": "www.instagram.com/ben"
     }
   ],
+  "amout_followers": "",
   "following": [
     {
       "name": "Ben",
