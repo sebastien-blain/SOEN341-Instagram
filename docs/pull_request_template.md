@@ -11,7 +11,7 @@ Please delete options that are not relevant.
 - [ ] BUG (Fixing or documenting a bug)
 - [ ] FEAT (Add a new feature to the project)
 - [ ] CHORE (Something that needs to be done outside of the issue)
-- [ ] DOCS (Implement documentation)
+- [ ] DOC (Implement documentation)
 - [ ] TASK (A task that must be done to complete an issue)
 
 # Test
