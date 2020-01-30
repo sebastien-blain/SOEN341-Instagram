@@ -26,7 +26,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 * David Thaï - https://github.com/davidthai0387
 * Cheikh Diagne - https://github.com/cheikhd97
 * Nafissa ... - https://github.com/
-* Julien Xu - https://github.com/
+* Julien Xu - https://github.com/xujulien99
 
 
 
