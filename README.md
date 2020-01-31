@@ -23,7 +23,7 @@ The goal of the project is to develop a simplified version of the Instagram appl
 
 ## Host
 * Netlify (Frontend)
-* Firebase (Backend)
+* Heroku (Backend)
 
 ## Team Members
 * Sébastien Blain-Nadeau - https://github.com/Sebastien0730
