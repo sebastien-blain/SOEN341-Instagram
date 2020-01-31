@@ -25,8 +25,5 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 * Phong Le - https://github.com/phong1233
 * David Thaï - https://github.com/davidthai0387
 * Cheikh Diagne - https://github.com/cheikhd97
-* Nafissa ... - https://github.com/
+* Nafisa Shamsuzzaman - https://github.com/theNafsters
 * Julien Xu - https://github.com/xujulien99
-
-
-
