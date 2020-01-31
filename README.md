@@ -14,11 +14,16 @@ The goal of the project is to develop a simplified version of the Instagram appl
 ## Additional features
 1. Cannot repost a picture without crediting the original post
 
-
 ## Technologies
 * React
-* Flask (Python)
-* AND MORE TBA
+* Python/Flask
+* Travis CI
+* MongoDB
+
+
+## Host
+* Netlify (Frontend)
+* Firebase (Backend)
 
 ## Team Members
 * Sébastien Blain-Nadeau - https://github.com/Sebastien0730
