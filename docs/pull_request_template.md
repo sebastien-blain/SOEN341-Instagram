@@ -2,11 +2,13 @@
 
 Brief summary of the changes made.
 
+Issue reference: #{Insert issue number here}
+
+## Branch and Commit name must follow this template
 ```
 Branch template: {ISSUE TYPE}-{Issue number}/{desciption_of_branch}
 Commit template: {ISSUE TYPE}-{Issue number}: {description of changes}
 ```
-Issue reference: #{Insert issue number here}
 
 ## Type of change
 
