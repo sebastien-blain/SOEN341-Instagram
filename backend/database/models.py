@@ -8,31 +8,33 @@ class User(db.Document):
     username = db.StringField(required=True, unique=True)
     fname = db.StringField(required=True)
     lname = db.StringField()
-    password = db.StringField(required=True, max_length=40)
-    pictures = db.ListField(db.IntField())
+    password = db.StringField(required=True)
+    pictures = db.ListField(db.ReferenceField(
+        'Picture'), reverse_delete_rule=db.PULL)
     nb_followers = db.IntField()
     followers = db.ListField(db.StringField())
     nb_following = db.IntField()
     following = db.ListField(db.StringField())
+    image_queue = db.ListField(db.ReferenceField(
+        'Picture'), reverse_delete_rule=db.PULL)
 
 
 class Comment(db.Document):
-    oid = db.IntField()
     user_id = db.StringField()
     message = db.StringField()
+    added_picture = db.ReferenceField('Picture')
 
 
 class Picture(db.Document):
-    oid = db.IntField(required=True)
     date = db.DateTimeField(required=True)
     owner = db.StringField()
-    user = db.StringField(required=True)
+    user = db.ReferenceField('User')
     link = db.URLField()
     nb_likes = db.IntField()
     nb_comments = db.IntField()
-    comments = db.ListField(db.IntField())
+    comments = db.ListField(db.ReferenceField(
+        'Comment', reverse_delete_rule=db.PULL))
 
 
-class ImageQueue(db.Document):
-    user_name = db.StringField(required=True)
-    pictures = db.ListField(db.IntField())
+Picture.register_delete_rule(Comment, 'added_picture', db.CASCADE)
+User.register_delete_rule(Picture, 'user', db.CASCADE)
