@@ -1,8 +1,9 @@
 import React from 'react';
+import MiniDrawer from './components/drawer';
 
 function App() {
   return (
-    <text>Hello welcome to panda</text>
+    <MiniDrawer />
   );
 }
 
