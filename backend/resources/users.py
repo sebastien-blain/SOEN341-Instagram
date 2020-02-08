@@ -11,33 +11,30 @@ from helpers.helper_methods import *
 class LoginApi(Resource):
     def post(self):
         body = request.get_json()
-        fields = ['email', 'password']
+        fields = ['username', 'password']
         if not fields_are_in(body, fields):
             return {'error': 'Missing a field'}, 400
 
-        user = User.objects(email=body.get('email')).first()
-
-        if user is not None:
-            user = user.to_json()
-        # Missing Authorization
-        return Response(user, mimetype="application/json", status=200)
-
-
-class RegisterApi(Resource):
-    def post(self):
-        body = request.get_json()
-        fields = ['email', 'username', 'fname', 'lname', 'password']
-        if not fields_are_in(body, fields):
-            return {'error': 'Missing a field'}, 400
-        if not is_email(body.get('email')):
-            return {'error': 'Invalid field email'}, 400
-
-        user = User(**body)
-        user.nb_followers = 0
-        user.nb_following = 0
-        user.save()
-
-        return {'message': 'User sucessfully added to database'}, 200
+        user = User.objects(username=body.get('username')).first()
+        if user is None:
+            new_user = {
+                'username': body.get('username'),
+                # Will add a hash password for security in the future
+                'password': body.get('password'),
+                'nb_followers': 0,
+                'nb_following': 0,
+            }
+            new_user = User(**new_user)
+            new_user.save()
+            # Will change for the token created with authorization
+            return {'message': 'User {} sucessfully added to the database'.format(new_user.username)}, 200
+        # Will change to hashed password int he future
+        user_password = body.get('password')
+        if user_password != user.password:
+            return {'error': 'Password does not match username'}, 200
+        if user_password == user.password:
+            # Will change for the token created with authorization
+            return {'message': 'User {} has login'.format(user.username)}, 200
 
 
 class UserApi(Resource):
