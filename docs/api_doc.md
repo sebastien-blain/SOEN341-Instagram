@@ -18,7 +18,7 @@ Possible return message:
 2. Password does not match the username provided:
 {
     error: "Password does not match username"
-}, 200
+}, 401
 3. User is already in database and password matches:
 {
     message: "User Sebastien has log in"

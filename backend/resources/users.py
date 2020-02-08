@@ -25,16 +25,17 @@ class LoginApi(Resource):
                 'nb_following': 0,
             }
             new_user = User(**new_user)
+            new_user.hash_password()
             new_user.save()
             # Will change for the token created with authorization
             return {'message': 'User {} sucessfully added to the database'.format(new_user.username)}, 200
         # Will change to hashed password int he future
-        user_password = body.get('password')
-        if user_password != user.password:
-            return {'error': 'Password does not match username'}, 200
-        if user_password == user.password:
+        authorized = user.check_password(body.get('password'))
+        if not authorized:
+            return {'error': 'Password does not match username'}, 401
+        if authorized:
             # Will change for the token created with authorization
-            return {'message': 'User {} has login'.format(user.username)}, 200
+            return {'message': 'User {} has log in'.format(user.username)}, 200
 
 
 class UserApi(Resource):
