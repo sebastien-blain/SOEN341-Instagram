@@ -23,9 +23,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
-
-import HomePage from './home/homePage';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -205,16 +202,6 @@ export default function MiniDrawer() {
   else {
     return (
       <button onClick={login}>Login</button>
-    );
-  }
-}
-
-class Login extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Login Page
-      </Typography>
     );
   }
 }
