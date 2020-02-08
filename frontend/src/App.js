@@ -2,7 +2,7 @@ import React from 'react';
 
 function App() {
   return (
-    <text>Hello welcome to panda</text>
+    <h1>Hello welcome to panda</h1>
   );
 }
 
