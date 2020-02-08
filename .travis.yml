@@ -1,0 +1,13 @@
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "stable"
+      cache:
+        directories:
+          - node_modules
+      before_install:
+        - cd frontend
+      script:
+        - npm test
+        - npm run build
