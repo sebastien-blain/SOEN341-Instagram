@@ -11,3 +11,13 @@ matrix:
       script:
         - npm test
         - npm run build
+    - language: python
+      python:
+        - "3.7"
+      before_install:
+        - cd backend
+      install:
+        - pip3 install -r requirements.txt
+      script:
+        - make test-unit
+        - make test-coverage
