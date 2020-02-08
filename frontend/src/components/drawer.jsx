@@ -19,6 +19,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
@@ -175,6 +176,10 @@ export default function MiniDrawer() {
               <ListItemText primary='Account'/>
             </ListItem>
           </Link>
+          <ListItem button key='Logout'>
+              <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+              <ListItemText primary='Logout'/>
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
