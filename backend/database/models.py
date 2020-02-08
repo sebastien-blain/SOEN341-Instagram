@@ -4,10 +4,7 @@ from .db import db
 
 
 class User(db.Document):
-    email = db.EmailField(required=True, unique=True)
     username = db.StringField(required=True, unique=True)
-    fname = db.StringField(required=True)
-    lname = db.StringField()
     password = db.StringField(required=True)
     pictures = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
