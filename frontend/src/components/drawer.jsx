@@ -93,6 +93,7 @@ export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [loggedin, setLoggedin] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,6 +103,12 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const login = () => {
+    setLoggedin(!loggedin);
+    console.log(loggedin);
+  };
+
+  if( loggedin ) {
   return (
     <Router>
     <div className={classes.root}>
@@ -176,7 +183,7 @@ export default function MiniDrawer() {
               <ListItemText primary='Account'/>
             </ListItem>
           </Link>
-          <ListItem button key='Logout'>
+          <ListItem button key='Logout' onClick={login}>
               <ListItemIcon><ExitToAppIcon /></ListItemIcon>
               <ListItemText primary='Logout'/>
           </ListItem>
@@ -194,6 +201,22 @@ export default function MiniDrawer() {
     </div>
     </Router>
   );
+  }
+  else {
+    return (
+      <button onClick={login}>Login</button>
+    );
+  }
+}
+
+class Login extends Component {
+  render() {
+    return (
+      <Typography variant="h6" noWrap>
+          Login Page
+      </Typography>
+    );
+  }
 }
 
 class Home extends Component {
