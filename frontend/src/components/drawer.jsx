@@ -22,6 +22,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import SearchPage from './search/searchPage';
+import VerticalLinearStepper from './postImage/uploadPage';
 
 const drawerWidth = 240;
 
@@ -102,7 +104,6 @@ export default function MiniDrawer() {
 
   const login = () => {
     setLoggedin(!loggedin);
-    console.log(loggedin);
   };
 
   if( loggedin ) {
@@ -190,8 +191,8 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
             <Switch>
               <Route path='/' exact component={Home}/>
-              <Route path='/search' component={Search}/>
-              <Route path='/upload' component={Upload}/>
+              <Route path='/search' component={SearchPage}/>
+              <Route path='/upload' component={VerticalLinearStepper}/>
               <Route path='/account' component={Account}/>
             </Switch>
       </main>
@@ -211,26 +212,6 @@ class Home extends Component {
     return (
       <Typography variant="h6" noWrap>
           Home Page
-      </Typography>
-    );
-  }
-}
-
-class Search extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Search Page
-      </Typography>
-    );
-  }
-}
-
-class Upload extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Upload Page
       </Typography>
     );
   }
