@@ -202,6 +202,7 @@ export default function MiniDrawer() {
   }
   else {
     return (
+      // Write the code here for the login page no need to do another component
       <button onClick={login}>Login</button>
     );
   }
