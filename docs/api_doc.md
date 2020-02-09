@@ -15,7 +15,7 @@ Possible return message:
 **1. User does not exist in database:**
 ```
 {
-    "message": "User Sebastien sucessfully added to the database"
+    "token": "jwt token"
 }, 200
 ```
 
@@ -23,13 +23,14 @@ Possible return message:
 ```
 {
     "error": "Password does not match username"
-}, 200
+}, 401
+
 ```
 
 **3. User is already in database and password matches:***
 ```
 {
-    "message": "User Sebastien has log in"
+    "token": "jwt login"
 }, 200
 ```
 

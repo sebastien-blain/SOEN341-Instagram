@@ -1,7 +1,9 @@
 from flask import Response, request
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from database.models import User
 from flask_restful import Resource
 from helpers.helper_methods import *
+import datetime
 
 # TODO: Using the same system, we need to write more apis for all the possible routes
 
@@ -22,37 +24,42 @@ class LoginApi(Resource):
         if user is None:
             new_user = {
                 'username': body.get('username'),
-                # Will add a hash password for security in the future
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
             }
             new_user = User(**new_user)
+            new_user.hash_password()
             new_user.save()
-            # Will change for the token created with authorization
-            return {'message': 'User {} sucessfully added to the database'.format(new_user.username)}, 200
-        # Will change to hashed password int he future
-        user_password = body.get('password')
-        if user_password != user.password:
-            return {'error': 'Password does not match username'}, 200
-        if user_password == user.password:
-            # Will change for the token created with authorization
-            return {'message': 'User {} has login'.format(user.username)}, 200
+            expires = datetime.timedelta(hours=3)
+            access_token = create_access_token(
+                identity=str(new_user.id), expires_delta=expires)
+            return {'token': access_token}, 200
+        authorized = user.check_password(body.get('password'))
+        if not authorized:
+            return {'error': 'Password does not match username'}, 401
+        if authorized:
+            expires = datetime.timedelta(hours=3)
+            access_token = create_access_token(
+                identity=str(user.id), expires_delta=expires)
+            return {'token': access_token}, 200
 
 
 class UserApi(Resource):
+    @jwt_required
     def get(self, username):
         # Looks into database and gets the object where name=name
         user = User.objects.get(username=username).to_json()
         # Returns the user object
         return Response(user, mimetype="application/json", status=200)
 
+    @jwt_required
     def post(self, username):
-        body = request.get_json()
+        uid = get_jwt_identity()
+        u = User.objects.get(id=uid)
         # Should check if name not already in the database, because name is unique
-        user = User(**body).save()
-        id = user.id
-        return {'id': str(id)}, 200
+        # user = User(**body).save()
+        return {'id': u.to_json()}, 200
 
 # Search an account route, will return a list of user with almost same name
 

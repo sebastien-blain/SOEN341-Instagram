@@ -1,5 +1,5 @@
 from .db import db
-
+from flask_bcrypt import generate_password_hash, check_password_hash
 # Create a class for all table that should be in the database
 
 
@@ -14,6 +14,12 @@ class User(db.Document):
     following = db.ListField(db.StringField())
     image_queue = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
+
+    def hash_password(self):
+        self.password = generate_password_hash(self.password).decode('utf-8')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class Comment(db.Document):
