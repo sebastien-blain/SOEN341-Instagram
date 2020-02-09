@@ -1,6 +1,4 @@
-# API DOC
-
-## /api/login
+# /api/login
 
 No expected header
 Expected body:
