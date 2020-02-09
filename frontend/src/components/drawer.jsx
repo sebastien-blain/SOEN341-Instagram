@@ -23,6 +23,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
+import VerticalLinearStepper from './postImage/uploadPage';
 
 const drawerWidth = 240;
 
@@ -191,7 +192,7 @@ export default function MiniDrawer() {
             <Switch>
               <Route path='/' exact component={Home}/>
               <Route path='/search' component={SearchPage}/>
-              <Route path='/upload' component={Upload}/>
+              <Route path='/upload' component={VerticalLinearStepper}/>
               <Route path='/account' component={Account}/>
             </Switch>
       </main>
@@ -211,16 +212,6 @@ class Home extends Component {
     return (
       <Typography variant="h6" noWrap>
           Home Page
-      </Typography>
-    );
-  }
-}
-
-class Upload extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Upload Page
       </Typography>
     );
   }
