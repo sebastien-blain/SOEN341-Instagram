@@ -3,12 +3,12 @@ from pymongo import MongoClient
 
 client = MongoClient()
 
-# To clear the local database at the start of the server to avoid conflict in changing databases tables
-client.drop_database('mypanda')
-mypanda = client['mypanda']
-collections = mypanda.collection_names()
-for collection_name in collections:
-    mypanda[collection_name].remove()
+# # To clear the local database at the start of the server to avoid conflict in changing databases tables
+# client.drop_database('mypanda')
+# mypanda = client['mypanda']
+# collections = mypanda.collection_names()
+# for collection_name in collections:
+#     mypanda[collection_name].remove()
 
 db = MongoEngine()
 
