@@ -7,6 +7,9 @@ from helpers.helper_methods import *
 
 # Login / register route
 
+class DefaultPage(Resource):
+    def get(self):
+        return 'Welcome to myPanda backend'
 
 class LoginApi(Resource):
     def post(self):
