@@ -20,6 +20,7 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import loginPage from './components/login/loginPage.jsx';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
@@ -201,7 +202,7 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      <button onClick={login}>Login</button>
+      <Route path='/login' component={loginPage}/>
     );
   }
 }
