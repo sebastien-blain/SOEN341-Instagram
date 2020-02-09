@@ -7,7 +7,7 @@ Images will be store in the database using this template
   "date": "datetimeformat",
   "owner": "Bob",
   "user": {
-    username
+    "username":"Bob"
   },
   "link": "www.example.com/image1",
   "message": "...",
