@@ -143,6 +143,7 @@ export default function MiniDrawer() {
         setInvalidPass(true);
       }
     })
+    .catch((error) => setLoggedin(!loggedin))
   };
 
   if( loggedin ) {
