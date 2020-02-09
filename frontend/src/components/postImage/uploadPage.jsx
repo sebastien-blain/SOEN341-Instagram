@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -50,12 +50,10 @@ export default function VerticalLinearStepper() {
   };
 
   const fileSelectedHandler = (event) => {
-    console.log(event.target.files[0]);
     setSelectedFile(event.target.files[0]);
   }
 
   const getDescription = (event) => {
-    console.log(event.target.value);
     setDescription(event.target.value);
   }
 

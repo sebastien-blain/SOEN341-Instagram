@@ -217,16 +217,6 @@ class Home extends Component {
   }
 }
 
-class Upload extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Upload Page
-      </Typography>
-    );
-  }
-}
-
 class Account extends Component {
   render() {
     return (
