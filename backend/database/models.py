@@ -32,7 +32,7 @@ class Comment(db.Document):
 
 class Picture(db.Document):
     date = db.DateTimeField(required=True)
-    owner = db.StringField()
+    owner = db.ReferenceField('User')
     user = db.ReferenceField('User')
     link = db.StringField()
     message = db.StringField()
