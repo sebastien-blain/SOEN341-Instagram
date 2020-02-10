@@ -19,6 +19,8 @@ class LoginApi(Resource):
         fields = ['username', 'password']
         if not fields_are_in(body, fields):
             return {'error': 'Missing a field'}, 400
+        if is_empy_or_none(body):
+            return {'error': 'A field is empty or None'}, 400
 
         user = User.objects(username=body.get('username')).first()
         if user is None:
@@ -32,17 +34,52 @@ class LoginApi(Resource):
             new_user.hash_password()
             new_user.save()
             expires = datetime.timedelta(hours=3)
-            access_token = create_access_token(
-                identity=str(new_user.id), expires_delta=expires)
+            access_token = create_access_token(identity=str(new_user.id), expires_delta=expires)
             return {'token': access_token}, 200
         authorized = user.check_password(body.get('password'))
         if not authorized:
             return {'error': 'Password does not match username'}, 401
         if authorized:
             expires = datetime.timedelta(hours=3)
-            access_token = create_access_token(
-                identity=str(user.id), expires_delta=expires)
+            access_token = create_access_token(identity=str(user.id), expires_delta=expires)
             return {'token': access_token}, 200
+
+
+class FollowUserApi(Resource):
+    @jwt_required
+    def post(self):
+        body = request.get_json()
+        fields = ['follow']
+        if not fields_are_in(body, fields):
+            return {'error': 'Missing a field'}, 400
+        if is_empy_or_none(body):
+            return {'error': 'A field is empty or None'}, 400
+
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+        
+        # Get the user we want to follow
+        new_follower = User.objects(username=body.get('follow')).first()
+        if new_follower is None:
+            return {'error': 'User {} does not exist'.format(body.get('follow'))}, 401
+
+        if new_follower.username == current_user.username:
+            return {'error': 'User cannot follow itself'}, 401
+
+        for f in current_user.following:
+            if f == new_follower:
+                return {'message': 'User {} is already following {}'.format(current_user.username, new_follower.username)}, 200
+
+        User.objects(id=user_id).update_one(push__following=new_follower)
+        User.objects(username=body.get('follow')).update_one(push__followers=current_user)
+        current_user.update(nb_following=current_user.nb_following + 1)
+        new_follower.update(nb_followers=new_follower.nb_followers + 1)
+
+        return {'message': 'User {} is now following {}'.format(current_user.username, new_follower.username)}, 200
 
 
 class UserApi(Resource):

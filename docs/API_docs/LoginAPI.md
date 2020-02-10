@@ -1,6 +1,4 @@
-# API DOC
-
-## /api/login
+# /api/login
 
 No expected header
 Expected body:
@@ -24,7 +22,6 @@ Possible return message:
 {
     "error": "Password does not match username"
 }, 401
-
 ```
 
 **3. User is already in database and password matches:***

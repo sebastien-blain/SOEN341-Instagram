@@ -9,9 +9,11 @@ class User(db.Document):
     pictures = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
     nb_followers = db.IntField()
-    followers = db.ListField(db.StringField())
+    followers = db.ListField(db.ReferenceField(
+        'User'), reverse_delete_rule=db.PULL)
     nb_following = db.IntField()
-    following = db.ListField(db.StringField())
+    following = db.ListField(db.ReferenceField(
+        'User'), reverse_delete_rule=db.PULL)
     image_queue = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
 
@@ -32,7 +34,8 @@ class Picture(db.Document):
     date = db.DateTimeField(required=True)
     owner = db.StringField()
     user = db.ReferenceField('User')
-    link = db.URLField()
+    link = db.StringField()
+    message = db.StringField()
     nb_likes = db.IntField()
     nb_comments = db.IntField()
     comments = db.ListField(db.ReferenceField(
