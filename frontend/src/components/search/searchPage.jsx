@@ -5,8 +5,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+
 
 import PersonIcon from '@material-ui/icons/Person';
+import UserPage from '../user/userPage';
 
 
 const useStyles = makeStyles(theme => ({
@@ -22,8 +25,9 @@ export default class SearchPage extends Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    this.state = { classes: useStyles, allList: MockSearch, userlist: MockSearch };
+    this.state = { classes: useStyles, allList: MockSearch, userlist: MockSearch, userDefined:false, chosenUser:undefined};
   }
+
 
   preciseSearch = (e) => {
     let letters = e.target.value;
@@ -40,22 +44,48 @@ export default class SearchPage extends Component {
     });    
   }
 
+  updateUser = (text) => {
+    console.log('clicked');
+    console.log(text.target);
+    let name = text.target.firstChild.nodeValue;
+    try {
+      if(name === null) {
+        name = text.target.firstChild.firstChild.nodeValue;
+      }
+      console.log(name);
+      this.setState(() => {return {userDefined: true}});
+      this.setState(() => {return {chosenUser: name}});
+    }
+    catch(e) {
+      return;
+    }
+  }
+
   render() {
-    return (
-      <div>
-        <form className={this.state.classes.root} noValidate autoComplete="off">
+    if (!this.state.userDefined){ 
+      return (
+          <div>
+          <form className={this.state.classes.root} noValidate autoComplete="off">
           <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
-        </form>
-        <div style={{marginTop:'30px'}}>
-          {this.state.userlist.map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon><PersonIcon/></ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          </form>
+            <div style={{marginTop:'30px'}}>
+              {this.state.userlist.map((text, index) => (
+                <div key={index} onClick={this.updateUser}>
+                  <ListItem button key={text} >
+                    <ListItemIcon><PersonIcon/></ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItem>
+                </div>
+              ))}
+            </div>
         </div>
-      </div>
-    );
+      );
+    }
+    else {
+      return (
+        <UserPage user={this.state.chosenUser} />
+      );
+    }
   }
 }
 

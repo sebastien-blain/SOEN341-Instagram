@@ -20,12 +20,13 @@ import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import UserPage from './user/userPage';
 
 const drawerWidth = 240;
 
@@ -215,7 +216,7 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          <Link to='/account' style={{ textDecoration: 'none', color: 'black' }}>
+          <Link to={'/'+username} style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Account'>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
               <ListItemText primary='Account'/>
@@ -231,9 +232,9 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
             <Switch>
               <Route path='/' exact component={() => <Home token={token} />}/>
-              <Route path='/search' component={SearchPage}/>
+              <Route path='/search' component={() => <SearchPage token={token}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path='/account' component={Account}/>
+              <Route path={'/'+username} component={() => <UserPage user={username} />}/>
             </Switch>
       </main>
     </div>
