@@ -5,9 +5,13 @@ from database.db import initialize_db
 from flask_restful import Api
 from resources.routes import initialize_routes
 
+from flask_cors import CORS, cross_origin
+
 app = Flask(__name__)
+CORS(app)
 app.config.from_envvar('ENV_FILE_LOCATION')
 api = Api(app)
+
 bcrypt = Bcrypt(app)
 jwt = JWTManager(app)
 
