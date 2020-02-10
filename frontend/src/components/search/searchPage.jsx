@@ -5,9 +5,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-
-
+import Button from '@material-ui/core/Button';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
 import UserPage from '../user/userPage';
 
@@ -19,7 +18,11 @@ const useStyles = makeStyles(theme => ({
       width: 200,
     },
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
+
 
 export default class SearchPage extends Component {
   constructor(props) {
@@ -44,21 +47,21 @@ export default class SearchPage extends Component {
     });    
   }
 
-  updateUser = (text) => {
-    console.log('clicked');
-    console.log(text.target);
-    let name = text.target.firstChild.nodeValue;
-    try {
-      if(name === null) {
-        name = text.target.firstChild.firstChild.nodeValue;
+  backtoSearch = () => {
+    this.setState(()=>{
+      return {
+        userlist: this.state.allList,
+        userDefined: false,
+        chosenUser: undefined
       }
-      console.log(name);
-      this.setState(() => {return {userDefined: true}});
-      this.setState(() => {return {chosenUser: name}});
-    }
-    catch(e) {
-      return;
-    }
+    });
+  }
+
+  updateUser(text){
+    console.log('clicked');
+    let name = text
+    this.setState(() => {return {userDefined: true}});
+    this.setState(() => {return {chosenUser: name}});
   }
 
   render() {
@@ -70,7 +73,7 @@ export default class SearchPage extends Component {
           </form>
             <div style={{marginTop:'30px'}}>
               {this.state.userlist.map((text, index) => (
-                <div key={index} onClick={this.updateUser}>
+                <div key={index} onClick={() => {this.updateUser(text)}}>
                   <ListItem button key={text} >
                     <ListItemIcon><PersonIcon/></ListItemIcon>
                     <ListItemText primary={text} />
@@ -83,7 +86,20 @@ export default class SearchPage extends Component {
     }
     else {
       return (
+        <div>
+        <Button
+        variant="contained"
+        color="primary"
+        className={this.state.classes.button}
+        startIcon={<ArrowBackIcon />}
+        onClick={this.backtoSearch}
+        >
+          Back to Search
+        </Button>
+        <br/>
+        <br/>
         <UserPage user={this.state.chosenUser} />
+        </div>
       );
     }
   }

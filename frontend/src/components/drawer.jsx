@@ -275,13 +275,3 @@ class Home extends Component {
     );
   }
 }
-
-class Account extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Account Page
-      </Typography>
-    );
-  }
-}
