@@ -1,15 +1,12 @@
-# /post
+# /search
+
+IS A GET
 
 Expected header:
 JWT token that identifies to a user
 
-Expected body:
-```
-{
-    "link": "s3 url link",
-    "message": "Message of picture",
-}
-```
+No Expected body:
+
 Possible return message:
 
 **1. Token is not good and does not link to an account, user need to login again:**
@@ -21,7 +18,18 @@ Possible return message:
 
 **2. Picture is added to database and to image queue of followers:**
 ```
-{
-    "message": "Picture successfully added to user Sebastien"
-}, 200
+[
+    {
+        "_id": {
+            "$oid": "5e40bfa170fa2346c2eada8a"
+        },
+        "username": "David"
+    },
+    {
+        "_id": {
+            "$oid": "5e40bfa670fa2346c2eada8b"
+        },
+        "username": "Phiong"
+    }
+], 200
 ```
