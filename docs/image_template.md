@@ -4,11 +4,15 @@ Images will be store in the database using this template
 
 ```JSON
 "image": {
-  "user": "www.instagram.com/Bob",
-  "post": "www.instagram.com/Bob",
-  "url": "www.example.com/image1",
-  "repost": "false",
-  "description": "...",
+  "date": "datetimeformat",
+  "owner": "Bob",
+  "user": {
+    "username":"Bob"
+  },
+  "link": "www.example.com/image1",
+  "message": "...",
+  "nb_likes": "5",
+  "nb_coments": "2",
   "comments": [
     {
       "user": "Mia",
@@ -19,6 +23,5 @@ Images will be store in the database using this template
       "comment": "..."
     },
   ],
-  "date": "jan 23 2020"
 }
 ```
