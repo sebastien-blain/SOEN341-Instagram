@@ -4,14 +4,17 @@ from database.models import User
 from flask_restful import Resource
 from helpers.helper_methods import *
 import datetime
+import json
 
 # TODO: Using the same system, we need to write more apis for all the possible routes
 
 # Login / register route
 
+
 class DefaultPage(Resource):
     def get(self):
         return 'Welcome to myPanda backend'
+
 
 class LoginApi(Resource):
     def post(self):
@@ -82,21 +85,30 @@ class FollowUserApi(Resource):
         return {'message': 'User {} is now following {}'.format(current_user.username, new_follower.username)}, 200
 
 
-class UserApi(Resource):
+class SearchUserAPI(Resource):
     @jwt_required
-    def get(self, username):
-        # Looks into database and gets the object where name=name
-        user = User.objects.get(username=username).to_json()
-        # Returns the user object
-        return Response(user, mimetype="application/json", status=200)
+    def get(self):
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
 
-    @jwt_required
-    def post(self, username):
-        uid = get_jwt_identity()
-        u = User.objects.get(id=uid)
-        # Should check if name not already in the database, because name is unique
-        # user = User(**body).save()
-        return {'id': u.to_json()}, 200
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        all_users = User.objects(id__ne=user_id).to_json()
+        all_users = json.loads(all_users)
+        c = 0
+        for u in all_users:
+            del u['password']
+            del u['image_queue']
+            del u['pictures']
+            del u['followers']
+            del u['following']
+            del u['nb_followers']
+            del u['nb_following']
+            all_users[c] = u
+            c += 1
+        return Response(json.dumps(all_users), mimetype="application/json", status=200)
 
 # Search an account route, will return a list of user with almost same name
 
