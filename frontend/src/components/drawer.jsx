@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,10 +21,14 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import ImageBox from './images/imageBox';
+
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SearchPage from './search/searchPage';
 
 const drawerWidth = 240;
+
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,6 +92,28 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MiniDrawer() {
+
+  //#region mockImageForTest
+  const mockImage = {
+    user: "www.instagram.com/Bob",
+    post: "www.instagram.com/Bob",
+    url: "https://i.redd.it/z9l08cn8wde41.png",
+    repost: "false",
+    description: "This is the caption",
+    comments: [
+      {
+        user: "Mia",
+        comment: "Nice pic"
+      },
+      {
+        user: "Khalifa",
+        comment: "Cool pic"
+      },
+    ],
+    date: "jan 23 2020"
+  }
+  //#endregion
+
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -105,99 +131,99 @@ export default function MiniDrawer() {
     setLoggedin(!loggedin);
   };
 
-  if( loggedin ) {
-  return (
-    <Router>
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar style={{backgroundColor:'black'}}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
+  if (loggedin) {
+    return (
+      <Router>
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open,
             })}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            My Panda
+            <Toolbar style={{ backgroundColor: 'black' }}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, {
+                  [classes.hide]: open,
+                })}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                My Panda
           </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
-            <ListItem button key='Home' >
-              <ListItemIcon><HomeIcon /></ListItemIcon>
-              <ListItemText primary='Home'/>
-            </ListItem>
-          </Link>
-          <Link to='/upload' style={{ textDecoration: 'none', color: 'black' }}>
-            <ListItem button key='Upload'>
-              <ListItemIcon><CameraAltIcon /></ListItemIcon>
-              <ListItemText primary='Upload'/>
-            </ListItem>
-          </Link>
-          <Link to='/search' style={{ textDecoration: 'none', color: 'black' }}>
-            <ListItem button key='Search'>
-              <ListItemIcon><PersonAddIcon /></ListItemIcon>
-              <ListItemText primary='Search'/>
-            </ListItem>
-          </Link>
-        </List>
-        <Divider />
-        <List>
-          <Link to='/account' style={{ textDecoration: 'none', color: 'black' }}>
-            <ListItem button key='Account'>
-              <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-              <ListItemText primary='Account'/>
-            </ListItem>
-          </Link>
-          <ListItem button key='Logout' onClick={login}>
-              <ListItemIcon><ExitToAppIcon /></ListItemIcon>
-              <ListItemText primary='Logout'/>
-          </ListItem>
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            className={clsx(classes.drawer, {
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            })}
+            classes={{
+              paper: clsx({
+                [classes.drawerOpen]: open,
+                [classes.drawerClose]: !open,
+              }),
+            }}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
+            </div>
+            <Divider />
+            <List>
+              <Link to='/' style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button key='Home' >
+                  <ListItemIcon><HomeIcon /></ListItemIcon>
+                  <ListItemText primary='Home' />
+                </ListItem>
+              </Link>
+              <Link to='/upload' style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button key='Upload'>
+                  <ListItemIcon><CameraAltIcon /></ListItemIcon>
+                  <ListItemText primary='Upload' />
+                </ListItem>
+              </Link>
+              <Link to='/search' style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button key='Search'>
+                  <ListItemIcon><PersonAddIcon /></ListItemIcon>
+                  <ListItemText primary='Search' />
+                </ListItem>
+              </Link>
+            </List>
+            <Divider />
+            <List>
+              <Link to='/account' style={{ textDecoration: 'none', color: 'black' }}>
+                <ListItem button key='Account'>
+                  <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+                  <ListItemText primary='Account' />
+                </ListItem>
+              </Link>
+              <ListItem button key='Logout' onClick={login}>
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                <ListItemText primary='Logout' />
+              </ListItem>
+            </List>
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={Home}/>
-              <Route path='/search' component={SearchPage}/>
-              <Route path='/upload' component={Upload}/>
-              <Route path='/account' component={Account}/>
+              <Route path='/' exact component={() => <ImageBox image={mockImage} />} />
+              <Route path='/search' component={SearchPage} />
+              <Route path='/upload' component={Upload} />
+              <Route path='/account' component={Account} />
             </Switch>
-      </main>
-    </div>
-    </Router>
-  );
+          </main>
+        </div>
+      </Router>
+    );
   }
   else {
     return (
@@ -210,7 +236,7 @@ class Home extends Component {
   render() {
     return (
       <Typography variant="h6" noWrap>
-          Home Page
+        Home Page
       </Typography>
     );
   }
@@ -220,7 +246,7 @@ class Upload extends Component {
   render() {
     return (
       <Typography variant="h6" noWrap>
-          Upload Page
+        Upload Page
       </Typography>
     );
   }
@@ -230,7 +256,7 @@ class Account extends Component {
   render() {
     return (
       <Typography variant="h6" noWrap>
-          Account Page
+        Account Page
       </Typography>
     );
   }
