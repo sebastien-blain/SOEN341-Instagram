@@ -1,4 +1,4 @@
-# /api/login
+# /login
 
 No expected header
 Expected body:

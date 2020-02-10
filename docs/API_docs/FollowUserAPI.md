@@ -1,4 +1,4 @@
-# /api/follow
+# /follow
 
 Expected header:
 JWT token that identifies to a user
