@@ -25,6 +25,9 @@ import ImageBox from './images/imageBox';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SearchPage from './search/searchPage';
+import VerticalLinearStepper from './postImage/uploadPage';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
@@ -118,6 +121,10 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [loggedin, setLoggedin] = React.useState(false);
+  const [username, setUsername] = React.useState(undefined);
+  const [password, setPassword] = React.useState(undefined);
+  const [token, setToken] = React.useState(undefined);
+  const [invalidPass, setInvalidPass] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -127,8 +134,42 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const enterUsername = (e) => {
+    setUsername(e.target.value);
+  }
+
+  const enterPassword = (e) => {
+    setPassword(e.target.value);
+  }
+
   const login = () => {
-    setLoggedin(!loggedin);
+    let body = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    console.log(body);
+    fetch('http://127.0.0.1:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      setToken(responseJson.token);
+      if(responseJson.token !== undefined) {
+        console.log('logged in')
+        setLoggedin(!loggedin);
+      }
+      else {
+        setInvalidPass(true);
+      }
+    })
+    .catch((error) => setLoggedin(!loggedin))
   };
 
   if (loggedin) {
@@ -215,9 +256,9 @@ export default function MiniDrawer() {
           <main className={classes.content}>
             <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={() => <ImageBox image={mockImage} />} />
+              <Route path='/' exact component={() => <ImageBox image={mockImage} token={token}/>} />
               <Route path='/search' component={SearchPage} />
-              <Route path='/upload' component={Upload} />
+              <Route path='/upload' component={VerticalLinearStepper} />
               <Route path='/account' component={Account} />
             </Switch>
           </main>
@@ -227,7 +268,25 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      <button onClick={login}>Login</button>
+      <div>
+        <TextField required id="standard-required" label="Username" onChange={enterUsername} />
+        <br/>
+        <br/>
+        <TextField
+          required
+          error={invalidPass}
+          id="standard-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          onChange={enterPassword}
+        />
+        <br/>
+        <br/>
+        <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
+          Login / Register
+        </Button>
+      </div>
     );
   }
 }
@@ -236,17 +295,7 @@ class Home extends Component {
   render() {
     return (
       <Typography variant="h6" noWrap>
-        Home Page
-      </Typography>
-    );
-  }
-}
-
-class Upload extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-        Upload Page
+        {this.props.token}
       </Typography>
     );
   }

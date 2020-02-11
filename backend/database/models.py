@@ -1,5 +1,5 @@
 from .db import db
-
+from flask_bcrypt import generate_password_hash, check_password_hash
 # Create a class for all table that should be in the database
 
 
@@ -9,11 +9,19 @@ class User(db.Document):
     pictures = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
     nb_followers = db.IntField()
-    followers = db.ListField(db.StringField())
+    followers = db.ListField(db.ReferenceField(
+        'User'), reverse_delete_rule=db.PULL)
     nb_following = db.IntField()
-    following = db.ListField(db.StringField())
+    following = db.ListField(db.ReferenceField(
+        'User'), reverse_delete_rule=db.PULL)
     image_queue = db.ListField(db.ReferenceField(
         'Picture'), reverse_delete_rule=db.PULL)
+
+    def hash_password(self):
+        self.password = generate_password_hash(self.password).decode('utf-8')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class Comment(db.Document):
@@ -26,7 +34,8 @@ class Picture(db.Document):
     date = db.DateTimeField(required=True)
     owner = db.StringField()
     user = db.ReferenceField('User')
-    link = db.URLField()
+    link = db.StringField()
+    message = db.StringField()
     nb_likes = db.IntField()
     nb_comments = db.IntField()
     comments = db.ListField(db.ReferenceField(

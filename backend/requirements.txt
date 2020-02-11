@@ -8,3 +8,6 @@ requests==2.22.0
 WTForms==2.2.1
 Coverage==5.0.3
 Werkzeug==0.15.6
+flask-bcrypt==0.7.1
+flask-jwt-extended==3.24.1
+flask-cors==3.0.7
