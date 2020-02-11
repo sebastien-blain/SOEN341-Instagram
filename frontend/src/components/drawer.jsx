@@ -138,14 +138,21 @@ export default function MiniDrawer() {
       setToken(responseJson.token);
       if(responseJson.token !== undefined) {
         console.log('logged in')
-        setLoggedin(!loggedin);
+        setLoggedin(true);
       }
       else {
         setInvalidPass(true);
       }
     })
-    .catch((error) => setLoggedin(!loggedin))
+    .catch((error) => setLoggedin(true))
   };
+
+  const logout = () => {
+    setUsername(undefined);
+    setPassword(undefined);
+    setToken(undefined);
+    setLoggedin(false);
+  }
 
   if( loggedin ) {
   return (
@@ -222,7 +229,7 @@ export default function MiniDrawer() {
               <ListItemText primary='Account'/>
             </ListItem>
           </Link>
-          <ListItem button key='Logout' onClick={login}>
+          <ListItem button key='Logout' onClick={logout}>
               <ListItemIcon><ExitToAppIcon /></ListItemIcon>
               <ListItemText primary='Logout'/>
           </ListItem>

@@ -10,6 +10,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
 import UserPage from '../user/userPage';
 
+import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,39 +68,47 @@ export default class SearchPage extends Component {
   render() {
     if (!this.state.userDefined){ 
       return (
+        <Router>
           <div>
-          <form className={this.state.classes.root} noValidate autoComplete="off">
-          <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
-          </form>
+            <form className={this.state.classes.root} noValidate autoComplete="off">
+              <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
+            </form>
             <div style={{marginTop:'30px'}}>
               {this.state.userlist.map((text, index) => (
                 <div key={index} onClick={() => {this.updateUser(text)}}>
+                  <Link to={'/'+text} style={{ textDecoration: 'none', color: 'black' }}>
                   <ListItem button key={text} >
                     <ListItemIcon><PersonIcon/></ListItemIcon>
                     <ListItemText primary={text} />
                   </ListItem>
+                  </Link>
                 </div>
               ))}
             </div>
-        </div>
+          </div>
+        </Router>
       );
     }
     else {
       return (
-        <div>
-        <Button
-        variant="contained"
-        color="primary"
-        className={this.state.classes.button}
-        startIcon={<ArrowBackIcon />}
-        onClick={this.backtoSearch}
-        >
-          Back to Search
-        </Button>
-        <br/>
-        <br/>
-        <UserPage user={this.state.chosenUser} />
-        </div>
+        <Router>
+          <div>
+            <Link to={'/search'} style={{ textDecoration: 'none', color: 'black' }}>
+              <Button
+              variant="contained"
+              color="primary"
+              className={this.state.classes.button}
+              startIcon={<ArrowBackIcon />}
+              onClick={this.backtoSearch}
+              >
+                Back to Search
+              </Button>
+            </Link>
+            <br/>
+            <br/>
+            <UserPage user={this.state.chosenUser} />
+          </div>
+        </Router>
       );
     }
   }
