@@ -17,11 +17,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
@@ -216,7 +216,7 @@ export default function MiniDrawer() {
           </Link>
           <Link to='/search' style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Search'>
-              <ListItemIcon><PersonAddIcon /></ListItemIcon>
+              <ListItemIcon><GroupAddIcon /></ListItemIcon>
               <ListItemText primary='Search'/>
             </ListItem>
           </Link>
