@@ -13,6 +13,11 @@ import json
 
 
 class DefaultPage(Resource):
+    def get(self):
+        return "Mypanda is running"
+
+
+class FeedAPI(Resource):
     # Return all images in image queue
     @jwt_required
     def get(self):
@@ -27,7 +32,7 @@ class DefaultPage(Resource):
             return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
         pictures = [json.loads(i.to_json()) for i in pictures]
-        pictures.sort(key=lambda x: x['date']['$date']) 
+        pictures.sort(key=lambda x: x['date']['$date'])
 
         return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
