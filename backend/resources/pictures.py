@@ -24,7 +24,8 @@ class PostPictureAPI(Resource):
             return {'error': 'Header token is not good, please login again'}, 401
 
         picture = {
-            'user': current_user,
+            'user': current_user.username,
+            'owner': current_user.username,
             'link': body.get('link'),
             'message': body.get('message'),
             'date': datetime.datetime.now(),

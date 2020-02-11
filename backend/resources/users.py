@@ -1,6 +1,6 @@
 from flask import Response, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from database.models import User
+from database.models import User, Picture
 from flask_restful import Resource
 from helpers.helper_methods import *
 import datetime
@@ -109,6 +109,39 @@ class SearchUserAPI(Resource):
             all_users[c] = u
             c += 1
         return Response(json.dumps(all_users), mimetype="application/json", status=200)
+
+
+class UserInfoAPI(Resource):
+    @jwt_required
+    def get(self, username):
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        user_info = User.objects(username=username).first()
+
+        if user_info is None:
+            return {'error': 'User {} does not exist'.format(username)}, 401
+
+        user_info = json.loads(user_info.to_json())
+
+        del user_info['password']
+        del user_info['image_queue']
+        for pic in range(len(user_info['pictures'])):
+            user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
+        user_info['already_follow'] = False
+
+        for user in user_info['followers']:
+            if user['$oid'] == user_id:
+                user_info['already_follow'] = True
+                break
+
+        return Response(json.dumps(user_info), mimetype="application/json", status=200)
+
+
 
 # Search an account route, will return a list of user with almost same name
 
