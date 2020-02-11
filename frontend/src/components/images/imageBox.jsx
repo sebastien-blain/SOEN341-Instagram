@@ -21,90 +21,92 @@ import Comment from './imageBox/Comment'
 
 //#region style
 const useStyles = makeStyles(theme => ({
-    root: {
-        maxWidth: 345,
-        fontSize: '14px',
-    },
-    text: {
-        fontSize: '11px',
-    },
-    subtext: {
-        fontSize: '10px',
-    },
-    media: {
-        height: 0,
-        paddingTop: '100%', // 16:9
-    },
-    expand: {
-        transform: 'rotate(0deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
-        }),
-    },
-    expandOpen: {
-        transform: 'rotate(180deg)',
-    },
+	root: {
+		maxWidth: 345,
+		fontSize: '14px',
+	},
+	text: {
+		fontSize: '11px',
+	},
+	subtext: {
+		fontSize: '10px',
+	},
+	media: {
+		height: 0,
+		paddingTop: '100%', // 16:9
+	},
+	expand: {
+		transform: 'rotate(0deg)',
+		marginLeft: 'auto',
+		transition: theme.transitions.create('transform', {
+			duration: theme.transitions.duration.shortest,
+		}),
+	},
+	expandOpen: {
+		transform: 'rotate(180deg)',
+	},
 }));
 //#endregion
 
 const ImageBox = (props) => {
-    const classes = useStyles();
-    const [expanded, setExpanded] = React.useState(false);
+	const classes = useStyles();
+	const [expanded, setExpanded] = React.useState(false);
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-    return (
-        <Card className={classes.root}>
-            <Typography className={classes.root}>
-                {props.image.user}
-            </Typography>
-            <Typography className={classes.subtext}>
-                {props.image.post}
-            </Typography>
-            <CardMedia
-                className={classes.media}
-                image={props.image.url}     //"https://i.redd.it/z9l08cn8wde41.png"
-                title=""
-            />
-            <CardContent>
-                <Typography className={classes.text} variant="body2" color="textSecondary" component="p">
-                    *Liked by...*
-        </Typography>
-                <Typography className={classes.text} variant="body2" color="textSecondary" component="p">
-                    {props.image.description}
-                </Typography>
-
-            </CardContent>
-            <CardActions disableSpacing>
-                <IconButton aria-label="like">
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="comment">
-                    <CommentIcon />
-                </IconButton>
-                <IconButton
-                    className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon />
-                </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                    <Comment
-                        user={props.image.comments.map(block => block.user)}
-                        comment={props.image.comments.map(block => block.comment)}>
-                    </Comment>
-                </CardContent>
-            </Collapse>
-        </Card>
-    );
+	const handleExpandClick = () => {
+		setExpanded(!expanded);
+	};
+	return (
+		<Card className={classes.root}>
+			<Typography className={classes.root}>
+				{props.image.user}
+			</Typography>
+			<Typography className={classes.subtext}>
+				{props.image.post}
+			</Typography>
+			<CardMedia
+					className={classes.media}
+					image={props.image.url}     //"https://i.redd.it/z9l08cn8wde41.png"
+					title=""
+			/>
+			<CardContent>
+				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
+					*Liked by...*
+				</Typography>
+				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
+						{props.image.description}
+				</Typography>
+			</CardContent>
+			<CardActions disableSpacing>
+				<IconButton aria-label="like">
+					<FavoriteIcon />
+				</IconButton>
+				<IconButton aria-label="comment">
+					<CommentIcon />
+				</IconButton>
+				<IconButton
+						className={clsx(classes.expand, {
+								[classes.expandOpen]: expanded,
+						})}
+						onClick={handleExpandClick}
+						aria-expanded={expanded}
+						aria-label="show more"
+				>
+				<ExpandMoreIcon />
+				</IconButton>
+			</CardActions>
+				<Collapse in={expanded} timeout="auto" unmountOnExit>
+					<CardContent>
+						<div>
+							{props.image.comments.map( (comment, index) => {
+								return (
+									<Comment user={comment.user} comment={comment.comment} key={index}/>
+								)
+							})}
+						</div>
+					</CardContent>
+				</Collapse>
+		</Card>
+	);
 }
 
 export default ImageBox
