@@ -50,7 +50,7 @@ export default class SearchPage extends Component {
   }
 
   updateList = () => {
-    fetch('http://127.0.0.1:5000/search', {
+    fetch(this.props.usedApi+'/search', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export default class SearchPage extends Component {
             </Link>
             <br/>
             <br/>
-            <UserPage user={this.state.chosenUser.username} token={this.props.token} notFollowing={this.state.chosenUser.already_follow} />
+            <UserPage user={this.state.chosenUser.username} token={this.props.token} notFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
           </div>
         </Router>
       );
