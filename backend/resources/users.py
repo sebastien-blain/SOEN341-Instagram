@@ -14,7 +14,7 @@ import json
 
 class DefaultPage(Resource):
     def get(self):
-        return "Mypanda is running"
+        return "Welcome to myPanda backend!!!! It works"
 
 
 class FeedAPI(Resource):
