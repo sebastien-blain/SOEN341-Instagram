@@ -58,16 +58,16 @@ const ImageBox = (props) => {
 				{props.image.post}
 			</Typography>
 			<CardMedia
-					className={classes.media}
-					image={props.image.url}     //"https://i.redd.it/z9l08cn8wde41.png"
-					title=""
+				className={classes.media}
+				image={props.image.url}     //"https://i.redd.it/z9l08cn8wde41.png"
+				title=""
 			/>
 			<CardContent>
 				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
 					*Liked by...*
 				</Typography>
 				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
-						{props.image.description}
+					{props.image.description}
 				</Typography>
 			</CardContent>
 			<CardActions disableSpacing>
@@ -78,27 +78,27 @@ const ImageBox = (props) => {
 					<CommentIcon />
 				</IconButton>
 				<IconButton
-						className={clsx(classes.expand, {
-								[classes.expandOpen]: expanded,
-						})}
-						onClick={handleExpandClick}
-						aria-expanded={expanded}
-						aria-label="show more"
+					className={clsx(classes.expand, {
+						[classes.expandOpen]: expanded,
+					})}
+					onClick={handleExpandClick}
+					aria-expanded={expanded}
+					aria-label="show more"
 				>
 				<ExpandMoreIcon />
 				</IconButton>
 			</CardActions>
-				<Collapse in={expanded} timeout="auto" unmountOnExit>
-					<CardContent>
-						<div>
-							{props.image.comments.map( (comment, index) => {
-								return (
-									<Comment user={comment.user} comment={comment.comment} key={index}/>
-								)
-							})}
-						</div>
-					</CardContent>
-				</Collapse>
+			<Collapse in={expanded} timeout="auto" unmountOnExit>
+				<CardContent>
+					<div>
+						{props.image.comments.map( (comment, index) => {
+							return (
+								<Comment user={comment.user} comment={comment.comment} key={index}/>
+							)
+						})}
+					</div>
+				</CardContent>
+			</Collapse>
 		</Card>
 	);
 }
