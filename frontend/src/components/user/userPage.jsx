@@ -55,6 +55,7 @@ export default class UserPage extends Component {
       className={this.state.classes.button}
       startIcon={<PersonAddIcon />}
       onClick={this.follow}
+      disabled={this.props.notFollowing}
       >
         Follow
       </Button>
