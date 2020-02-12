@@ -160,6 +160,13 @@ class UserInfoAPI(Resource):
         for pic in range(len(user_info['pictures'])):
             user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
 
+        user_info['already_follow'] = False
+
+        for user in user_info['followers']:
+            if user['$oid'] == user_id:
+                user_info['already_follow'] = True
+                break
+
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
 
