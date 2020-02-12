@@ -6,16 +6,12 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
-    pictures = db.ListField(db.ReferenceField(
-        'Picture'), reverse_delete_rule=db.PULL)
+    pictures = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
     nb_followers = db.IntField()
-    followers = db.ListField(db.ReferenceField(
-        'User'), reverse_delete_rule=db.PULL)
+    followers = db.ListField(db.ReferenceField('User'), reverse_delete_rule=db.PULL)
     nb_following = db.IntField()
-    following = db.ListField(db.ReferenceField(
-        'User'), reverse_delete_rule=db.PULL)
-    image_queue = db.ListField(db.ReferenceField(
-        'Picture'), reverse_delete_rule=db.PULL)
+    following = db.ListField(db.ReferenceField('User'), reverse_delete_rule=db.PULL)
+    image_queue = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
 
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf-8')
@@ -32,8 +28,8 @@ class Comment(db.Document):
 
 class Picture(db.Document):
     date = db.DateTimeField(required=True)
-    owner = db.ReferenceField('User')
-    user = db.ReferenceField('User')
+    owner = db.StringField()
+    user = db.StringField()
     link = db.StringField()
     message = db.StringField()
     nb_likes = db.IntField()
