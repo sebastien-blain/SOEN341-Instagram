@@ -62,7 +62,9 @@ export default class SearchPage extends Component {
       this.setState(() => {
         return {
           allList: responseJson,
-          userlist: responseJson
+          userlist: responseJson,
+          userDefined: false,
+          chosenUser: undefined
         };
       })
     })
@@ -71,20 +73,12 @@ export default class SearchPage extends Component {
       this.setState(() => {
         return {
           allList: MockSearch,
-          userlist: MockSearch
+          userlist: MockSearch,
+          userDefined: false,
+          chosenUser: undefined
         };
       })
     })
-  }
-
-  backtoSearch = () => {
-    this.setState(()=>{
-      return {
-        userlist: this.state.allList,
-        userDefined: false,
-        chosenUser: undefined
-      }
-    });
   }
 
   updateUser(text){
@@ -128,7 +122,7 @@ export default class SearchPage extends Component {
               color="primary"
               className={this.state.classes.button}
               startIcon={<ArrowBackIcon />}
-              onClick={this.backtoSearch}
+              onClick={this.updateList}
               >
                 Back to Search
               </Button>
