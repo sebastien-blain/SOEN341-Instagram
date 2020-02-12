@@ -197,7 +197,7 @@ export default function MiniDrawer() {
               </IconButton>
               <Typography variant="h6" noWrap>
                 My Panda
-          </Typography>
+              </Typography>
             </Toolbar>
           </AppBar>
           <Drawer
@@ -287,16 +287,6 @@ export default function MiniDrawer() {
           Login / Register
         </Button>
       </div>
-    );
-  }
-}
-
-class Home extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-        {this.props.token}
-      </Typography>
     );
   }
 }
