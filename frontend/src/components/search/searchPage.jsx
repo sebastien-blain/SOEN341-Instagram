@@ -50,7 +50,7 @@ export default class SearchPage extends Component {
   }
 
   updateList = () => {
-    fetch('http://127.0.0.1:5000/search', {
+    fetch(this.props.usedApi+'/search', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -89,6 +89,7 @@ export default class SearchPage extends Component {
 
   updateUser(text){
     let name = text
+    console.log(text);
     this.setState(() => {return {userDefined: true}});
     this.setState(() => {return {chosenUser: name}});
   }
@@ -103,7 +104,7 @@ export default class SearchPage extends Component {
             </form>
             <div style={{marginTop:'30px'}}>
               {this.state.userlist.map((text, index) => (
-                <div key={index} onClick={() => {this.updateUser(text.username)}}>
+                <div key={index} onClick={() => {this.updateUser(text)}}>
                   <Link to={'/'+text.username} style={{ textDecoration: 'none', color: 'black' }}>
                   <ListItem button key={text.username} >
                     <ListItemIcon><PersonIcon/></ListItemIcon>
@@ -134,7 +135,7 @@ export default class SearchPage extends Component {
             </Link>
             <br/>
             <br/>
-            <UserPage user={this.state.chosenUser} token={this.props.token}/>
+            <UserPage user={this.state.chosenUser.username} token={this.props.token} notFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
           </div>
         </Router>
       );

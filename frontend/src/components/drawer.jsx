@@ -30,6 +30,10 @@ import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
 import UserPage from './user/userPage';
 
+import config from '../config';
+
+const usedApi = config.devApi;
+
 const drawerWidth = 240;
 
 
@@ -149,7 +153,7 @@ export default function MiniDrawer() {
       password: password,
     });
     console.log(body);
-    fetch('http://127.0.0.1:5000/login', {
+    fetch(usedApi+'/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -265,9 +269,9 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
             <Switch>
               <Route path='/' exact component={() => <ImageBox image={mockImage} token={token}/>} />
-              <Route path='/search' component={() => <SearchPage token={token}/>}/>
+              <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path={'/'+username} component={() => <UserPage user={username} />}/>
+              <Route path={'/'+username} component={() => <UserPage user={username} notFollowing={true} />}/>
             </Switch>
           </main>
         </div>
@@ -295,16 +299,6 @@ export default function MiniDrawer() {
           Login / Register
         </Button>
       </div>
-    );
-  }
-}
-
-class Account extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-        Account Page
-      </Typography>
     );
   }
 }

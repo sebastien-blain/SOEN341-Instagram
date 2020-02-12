@@ -1,10 +1,11 @@
 from flask import Response, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from database.models import User
+from database.models import User, Picture
 from flask_restful import Resource
 from helpers.helper_methods import *
-import datetime
+from datetime import *
 import json
+
 
 # TODO: Using the same system, we need to write more apis for all the possible routes
 
@@ -13,7 +14,27 @@ import json
 
 class DefaultPage(Resource):
     def get(self):
-        return 'Welcome to myPanda backend'
+        return "Welcome to myPanda backend!!!! It works"
+
+
+class FeedAPI(Resource):
+    # Return all images in image queue
+    @jwt_required
+    def get(self):
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        pictures = current_user.image_queue
+        if len(pictures) == 0:
+            return Response(json.dumps(pictures), mimetype="application/json", status=200)
+
+        pictures = [json.loads(i.to_json()) for i in pictures]
+        pictures.sort(key=lambda x: x['date']['$date'])
+
+        return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
 
 class LoginApi(Resource):
@@ -36,14 +57,14 @@ class LoginApi(Resource):
             new_user = User(**new_user)
             new_user.hash_password()
             new_user.save()
-            expires = datetime.timedelta(hours=3)
+            expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(new_user.id), expires_delta=expires)
             return {'token': access_token}, 200
         authorized = user.check_password(body.get('password'))
         if not authorized:
             return {'error': 'Password does not match username'}, 401
         if authorized:
-            expires = datetime.timedelta(hours=3)
+            expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
             return {'token': access_token}, 200
 
@@ -99,6 +120,12 @@ class SearchUserAPI(Resource):
         all_users = json.loads(all_users)
         c = 0
         for u in all_users:
+            u['already_follow'] = False
+
+            for user in u['followers']:
+                if user['$oid'] == user_id:
+                    u['already_follow'] = True
+                    break
             del u['password']
             del u['image_queue']
             del u['pictures']
@@ -109,6 +136,39 @@ class SearchUserAPI(Resource):
             all_users[c] = u
             c += 1
         return Response(json.dumps(all_users), mimetype="application/json", status=200)
+
+
+class UserInfoAPI(Resource):
+    @jwt_required
+    def get(self, username):
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        user_info = User.objects(username=username).first()
+
+        if user_info is None:
+            return {'error': 'User {} does not exist'.format(username)}, 401
+
+        user_info = json.loads(user_info.to_json())
+
+        del user_info['password']
+        del user_info['image_queue']
+        for pic in range(len(user_info['pictures'])):
+            user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
+
+        user_info['already_follow'] = False
+
+        for user in user_info['followers']:
+            if user['$oid'] == user_id:
+                user_info['already_follow'] = True
+                break
+
+        return Response(json.dumps(user_info), mimetype="application/json", status=200)
+
 
 # Search an account route, will return a list of user with almost same name
 
