@@ -20,10 +20,17 @@ export default class UserPage extends Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    this.state = { classes: useStyles };
+    this.state = { classes: useStyles, notFollowing: this.props.notFollowing };
   }
 
   follow = () => {
+    this.setState(() => {
+      return(
+        {
+          notFollowing: true
+        }
+      )
+    })
     fetch('http://127.0.0.1:5000/follow', {
       method: 'POST',
       headers: {
@@ -55,7 +62,7 @@ export default class UserPage extends Component {
       className={this.state.classes.button}
       startIcon={<PersonAddIcon />}
       onClick={this.follow}
-      disabled={this.props.notFollowing}
+      disabled={this.state.notFollowing}
       >
         Follow
       </Button>
