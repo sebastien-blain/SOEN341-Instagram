@@ -100,7 +100,7 @@ export default class SearchPage extends Component {
         <Router>
           <div>
             <form className={this.state.classes.root} noValidate autoComplete="off">
-              <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
+              <TextField id="outlined-basic" label="Search" variant="outlined" onFocus={this.updateList} onKeyUp={this.preciseSearch}/>
             </form>
             <div style={{marginTop:'30px'}}>
               {this.state.userlist.map((text, index) => (
