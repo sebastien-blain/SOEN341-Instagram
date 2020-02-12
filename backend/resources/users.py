@@ -99,6 +99,12 @@ class SearchUserAPI(Resource):
         all_users = json.loads(all_users)
         c = 0
         for u in all_users:
+            u['already_follow'] = False
+
+            for user in u['followers']:
+                if user['$oid'] == user_id:
+                    u['already_follow'] = True
+                    break
             del u['password']
             del u['image_queue']
             del u['pictures']
@@ -132,15 +138,8 @@ class UserInfoAPI(Resource):
         del user_info['image_queue']
         for pic in range(len(user_info['pictures'])):
             user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
-        user_info['already_follow'] = False
-
-        for user in user_info['followers']:
-            if user['$oid'] == user_id:
-                user_info['already_follow'] = True
-                break
 
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
-
 
 
 # Search an account route, will return a list of user with almost same name
