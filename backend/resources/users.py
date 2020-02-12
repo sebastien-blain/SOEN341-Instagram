@@ -3,8 +3,9 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from database.models import User, Picture
 from flask_restful import Resource
 from helpers.helper_methods import *
-import datetime
+from datetime import *
 import json
+
 
 # TODO: Using the same system, we need to write more apis for all the possible routes
 
@@ -13,7 +14,27 @@ import json
 
 class DefaultPage(Resource):
     def get(self):
-        return 'Welcome to myPanda backend'
+        return "Welcome to myPanda backend!!!! It works"
+
+
+class FeedAPI(Resource):
+    # Return all images in image queue
+    @jwt_required
+    def get(self):
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        pictures = current_user.image_queue
+        if len(pictures) == 0:
+            return Response(json.dumps(pictures), mimetype="application/json", status=200)
+
+        pictures = [json.loads(i.to_json()) for i in pictures]
+        pictures.sort(key=lambda x: x['date']['$date'])
+
+        return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
 
 class LoginApi(Resource):
@@ -36,14 +57,14 @@ class LoginApi(Resource):
             new_user = User(**new_user)
             new_user.hash_password()
             new_user.save()
-            expires = datetime.timedelta(hours=3)
+            expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(new_user.id), expires_delta=expires)
             return {'token': access_token}, 200
         authorized = user.check_password(body.get('password'))
         if not authorized:
             return {'error': 'Password does not match username'}, 401
         if authorized:
-            expires = datetime.timedelta(hours=3)
+            expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
             return {'token': access_token}, 200
 

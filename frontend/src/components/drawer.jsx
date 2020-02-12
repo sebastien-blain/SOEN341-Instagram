@@ -17,15 +17,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import UserPage from './user/userPage';
 
 const drawerWidth = 240;
 
@@ -137,14 +138,21 @@ export default function MiniDrawer() {
       setToken(responseJson.token);
       if(responseJson.token !== undefined) {
         console.log('logged in')
-        setLoggedin(!loggedin);
+        setLoggedin(true);
       }
       else {
         setInvalidPass(true);
       }
     })
-    .catch((error) => setLoggedin(!loggedin))
+    .catch((error) => setLoggedin(true))
   };
+
+  const logout = () => {
+    setUsername(undefined);
+    setPassword(undefined);
+    setToken(undefined);
+    setLoggedin(false);
+  }
 
   if( loggedin ) {
   return (
@@ -208,20 +216,20 @@ export default function MiniDrawer() {
           </Link>
           <Link to='/search' style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Search'>
-              <ListItemIcon><PersonAddIcon /></ListItemIcon>
+              <ListItemIcon><GroupAddIcon /></ListItemIcon>
               <ListItemText primary='Search'/>
             </ListItem>
           </Link>
         </List>
         <Divider />
         <List>
-          <Link to='/account' style={{ textDecoration: 'none', color: 'black' }}>
+          <Link to={'/'+username} style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Account'>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
               <ListItemText primary='Account'/>
             </ListItem>
           </Link>
-          <ListItem button key='Logout' onClick={login}>
+          <ListItem button key='Logout' onClick={logout}>
               <ListItemIcon><ExitToAppIcon /></ListItemIcon>
               <ListItemText primary='Logout'/>
           </ListItem>
@@ -231,9 +239,9 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
             <Switch>
               <Route path='/' exact component={() => <Home token={token} />}/>
-              <Route path='/search' component={SearchPage}/>
+              <Route path='/search' component={() => <SearchPage token={token}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path='/account' component={Account}/>
+              <Route path={'/'+username} component={() => <UserPage user={username} />}/>
             </Switch>
       </main>
     </div>
@@ -270,16 +278,6 @@ class Home extends Component {
     return (
       <Typography variant="h6" noWrap>
         {this.props.token}
-      </Typography>
-    );
-  }
-}
-
-class Account extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Account Page
       </Typography>
     );
   }
