@@ -4,8 +4,8 @@ from flask_jwt_extended import JWTManager
 from database.db import initialize_db
 from flask_restful import Api
 from resources.routes import initialize_routes
-
 from flask_cors import CORS, cross_origin
+import os
 
 heroku = Flask(__name__)
 CORS(heroku)
@@ -15,11 +15,12 @@ api = Api(heroku)
 bcrypt = Bcrypt(heroku)
 jwt = JWTManager(heroku)
 
+host = os.getenv('MONGODB_HOST')
+
 heroku.config['MONGODB_SETTINGS'] = {
+    'host': host,
     'retryWrites': 'false'
 }
-
-heroku.config['MONGODB_SETTINGS'].from_envvar('host')
 
 initialize_db(heroku)
 
