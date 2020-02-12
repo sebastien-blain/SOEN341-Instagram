@@ -30,7 +30,7 @@ import UserPage from './user/userPage';
 
 import config from '../config';
 
-const usedApi = config.devApi;
+const usedApi = config.prodApi;
 
 const drawerWidth = 240;
 
