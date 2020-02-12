@@ -7,20 +7,20 @@ from resources.routes import initialize_routes
 
 from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
-CORS(app)
-app.config.from_envvar('ENV_FILE_LOCATION')
-api = Api(app)
+heroku = Flask(__name__)
+CORS(heroku)
+heroku.config.from_envvar('ENV_FILE_LOCATION')
+api = Api(heroku)
 
-bcrypt = Bcrypt(app)
-jwt = JWTManager(app)
+bcrypt = Bcrypt(heroku)
+jwt = JWTManager(heroku)
 
-app.config['MONGODB_SETTINGS'] = {
+heroku.config['MONGODB_SETTINGS'] = {
     'retryWrites': 'false'
 }
 
-app.config['MONGODB_SETTINGS'].from_envvar('host')
+heroku.config['MONGODB_SETTINGS'].from_envvar('host')
 
-initialize_db(app)
+initialize_db(heroku)
 
 initialize_routes(api)
