@@ -5,9 +5,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-
+import Button from '@material-ui/core/Button';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
+import UserPage from '../user/userPage';
 
+import {BrowserRouter as Router, Link} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,63 +19,218 @@ const useStyles = makeStyles(theme => ({
       width: 200,
     },
   },
+  button: {
+    margin: theme.spacing(1),
+  },
 }));
+
 
 export default class SearchPage extends Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    this.state = { classes: useStyles, allList: MockSearch, userlist: MockSearch };
+    this.state = { classes: useStyles, allList: [], userlist: [], userDefined:false, chosenUser:undefined};
   }
+
 
   preciseSearch = (e) => {
     let letters = e.target.value;
     let tempList = this.state.allList;
     let re = new RegExp(('^'+letters),"gi");
     let newList = tempList.filter(element => {
-      // console.log(re.test(element));
-      return re.test(element);
+      return re.test(element.username);
     });
-    console.log(re.test('Ben'))
-    console.log(newList);
     this.setState(() => {
       return {userlist: newList};
     });    
   }
 
+  componentDidMount() {
+    this.updateList();
+  }
+
+  updateList = () => {
+    fetch('http://127.0.0.1:5000/search', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+this.props.token
+      }
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState(() => {
+        return {
+          allList: responseJson,
+          userlist: responseJson
+        };
+      })
+    })
+    .catch((e) =>  {
+      console.log(e)
+      this.setState(() => {
+        return {
+          allList: MockSearch,
+          userlist: MockSearch
+        };
+      })
+    })
+  }
+
+  backtoSearch = () => {
+    this.setState(()=>{
+      return {
+        userlist: this.state.allList,
+        userDefined: false,
+        chosenUser: undefined
+      }
+    });
+  }
+
+  updateUser(text){
+    let name = text
+    this.setState(() => {return {userDefined: true}});
+    this.setState(() => {return {chosenUser: name}});
+  }
+
   render() {
-    return (
-      <div>
-        <form className={this.state.classes.root} noValidate autoComplete="off">
-          <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
-        </form>
-        <div style={{marginTop:'30px'}}>
-          {this.state.userlist.map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon><PersonIcon/></ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </div>
-      </div>
-    );
+    if (!this.state.userDefined){ 
+      return (
+        <Router>
+          <div>
+            <form className={this.state.classes.root} noValidate autoComplete="off">
+              <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
+            </form>
+            <div style={{marginTop:'30px'}}>
+              {this.state.userlist.map((text, index) => (
+                <div key={index} onClick={() => {this.updateUser(text.username)}}>
+                  <Link to={'/'+text.username} style={{ textDecoration: 'none', color: 'black' }}>
+                  <ListItem button key={text.username} >
+                    <ListItemIcon><PersonIcon/></ListItemIcon>
+                    <ListItemText primary={text.username} />
+                  </ListItem>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Router>
+      );
+    }
+    else {
+      return (
+        <Router>
+          <div>
+            <Link to={'/search'} style={{ textDecoration: 'none', color: 'black' }}>
+              <Button
+              variant="contained"
+              color="primary"
+              className={this.state.classes.button}
+              startIcon={<ArrowBackIcon />}
+              onClick={this.backtoSearch}
+              >
+                Back to Search
+              </Button>
+            </Link>
+            <br/>
+            <br/>
+            <UserPage user={this.state.chosenUser} token={this.props.token}/>
+          </div>
+        </Router>
+      );
+    }
   }
 }
 
 const MockSearch = [
-  "Sebasiten",
-  "Cheikh",
-  "David",
-  "Nafisa",
-  "Julien",
-  "Bobby",
-  "Chimp",
-  "Ben",
-  "Phong",
-  "Arianne",
-  "Emy",
-  "Bob",
-  "Billy",
-  "Nelly",
-  "Jon"
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Sebasiten"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "David"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Cheikh"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Nafisa"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Phong"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Julien"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Bobby"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Arianne"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "King T'Chala"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Mia"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Khalifa"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Bob"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Naruto"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Ronaldo"
+  },
+  {
+    "_id": {
+        "$oid": "5e4222f618a73cc9e6cf5889"
+    },
+    "username": "Nelly"
+  }
 ]
