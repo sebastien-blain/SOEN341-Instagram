@@ -50,7 +50,7 @@ class LoginApi(Resource):
         user = User.objects(username=username).first()
         if user is None:
             new_user = {
-                'username': body.get('username'),
+                'username': username,
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
