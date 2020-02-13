@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -109,7 +109,6 @@ const useStyles = makeStyles(theme => ({
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const location = window.navigator && window.navigator.geolocation
   const [open, setOpen] = React.useState(false);
   const [loggedin, setLoggedin] = React.useState(false);
   const [username, setUsername] = React.useState(undefined);
@@ -119,8 +118,16 @@ export default function MiniDrawer() {
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
 
-  location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);})
-  location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);})
+  useEffect(() => {
+    const location = window.navigator && window.navigator.geolocation;
+    try {
+      location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);});
+      location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);});
+    }
+    catch(e) {
+      console.log('failed')
+    }
+  });
 
   const handleDrawerOpen = () => {
     setOpen(true);
