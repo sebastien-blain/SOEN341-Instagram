@@ -38,6 +38,17 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
   },
+  loginPage:{
+    flex:1,
+    textAlign:'center',
+    backgroundColor: 'white',
+  },
+  imageWithText:{
+    fontFamily:'Arial',
+  },
+  first:{
+    position:'absolute',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -254,25 +265,33 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      <div>
-        <TextField required id="standard-required" label="Username" onChange={enterUsername} />
-        <br/>
-        <br/>
+      <form className={classes.loginPage} noValidate autoComplete="off">
+        <div className={classes.imageWithText}>
+          <img src="/panda.jpg" alt="" ></img>
+        </div>
         <TextField
+          id="standard-required"
+          label="Username"
+          variant="filled"
+          onChange={enterUsername}
           required
-          error={invalidPass}
-          id="standard-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={enterPassword}
         />
-        <br/>
-        <br/>
+        <div>
+          <TextField
+            label="Password"
+            type="password"
+            variant="filled"
+            required
+            error={invalidPass}
+            id="standard-password-input"
+            autoComplete="current-password"
+            onChange={enterPassword}
+          />
+        </div>
         <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
           Login / Register
         </Button>
-      </div>
+      </form>
     );
   }
 }
@@ -280,6 +299,7 @@ export default function MiniDrawer() {
 class Home extends Component {
   render() {
     return (
+
       <Typography variant="h6" noWrap>
         {this.props.token}
       </Typography>
