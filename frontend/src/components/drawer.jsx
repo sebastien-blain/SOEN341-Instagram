@@ -120,8 +120,13 @@ export default function MiniDrawer() {
 
   useEffect(() => {
     const location = window.navigator && window.navigator.geolocation;
-    location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);});
-    location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);});
+    try {
+      location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);});
+      location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);});
+    }
+    catch(e) {
+      console.log('failed')
+    }
   });
 
   const handleDrawerOpen = () => {
