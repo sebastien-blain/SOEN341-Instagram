@@ -5,6 +5,7 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
+import TextField from '@material-ui/core/TextField';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -21,6 +22,10 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+
+
+
+
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
@@ -29,8 +34,25 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
+    '& > *':{
     display: 'flex',
-  },
+    margin: theme.spacing(1),
+    width: 200,
+    
+  }
+},
+loginPage:{
+  flex:1,
+  textAlign:'center',
+  backgroundColor: 'white',
+},
+imageWithText:{
+fontFamily:'Arial',
+
+},
+first:{
+  position:'absolute',
+},
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -202,8 +224,18 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      // Write the code here for the login page no need to do another component
-      <button onClick={login}>Login</button>
+      
+      <form className={classes.loginPage} noValidate autoComplete="off">
+       
+       <div class={classes.imageWithText}>
+        <img src="/panda.jpg" alt="" ></img>
+        </div>
+        <TextField id="filled-basic" label="Username" variant="filled" />
+        <div><TextField id="filled-basic" label="Password" input type="password" variant="filled"/> </div>
+  <button onClick={login}><centre>Login</centre></button>
+
+      </form>
+      
     );
   }
 }
@@ -211,6 +243,7 @@ export default function MiniDrawer() {
 class Home extends Component {
   render() {
     return (
+
       <Typography variant="h6" noWrap>
           Home Page
       </Typography>
