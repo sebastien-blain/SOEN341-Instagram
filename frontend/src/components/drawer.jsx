@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import TextField from '@material-ui/core/TextField';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -18,13 +17,20 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
+import UserPage from './user/userPage';
+
+import config from '../config';
+
+const usedApi = config.prodApi;
 
 const drawerWidth = 240;
 
@@ -105,6 +111,10 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [loggedin, setLoggedin] = React.useState(false);
+  const [username, setUsername] = React.useState(undefined);
+  const [password, setPassword] = React.useState(undefined);
+  const [token, setToken] = React.useState(undefined);
+  const [invalidPass, setInvalidPass] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -114,9 +124,50 @@ export default function MiniDrawer() {
     setOpen(false);
   };
 
+  const enterUsername = (e) => {
+    setUsername(e.target.value);
+  }
+
+  const enterPassword = (e) => {
+    setPassword(e.target.value);
+  }
+
   const login = () => {
-    setLoggedin(!loggedin);
+    let body = JSON.stringify({
+      username: username,
+      password: password,
+    });
+    console.log(body);
+    fetch(usedApi+'/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      setToken(responseJson.token);
+      if(responseJson.token !== undefined) {
+        console.log('logged in')
+        setLoggedin(true);
+      }
+      else {
+        setInvalidPass(true);
+      }
+    })
+    .catch((error) => setLoggedin(true))
   };
+
+  const logout = () => {
+    setUsername(undefined);
+    setPassword(undefined);
+    setToken(undefined);
+    setLoggedin(false);
+  }
 
   if( loggedin ) {
   return (
@@ -180,20 +231,20 @@ export default function MiniDrawer() {
           </Link>
           <Link to='/search' style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Search'>
-              <ListItemIcon><PersonAddIcon /></ListItemIcon>
+              <ListItemIcon><GroupAddIcon /></ListItemIcon>
               <ListItemText primary='Search'/>
             </ListItem>
           </Link>
         </List>
         <Divider />
         <List>
-          <Link to='/account' style={{ textDecoration: 'none', color: 'black' }}>
+          <Link to={'/'+username} style={{ textDecoration: 'none', color: 'black' }}>
             <ListItem button key='Account'>
               <ListItemIcon><AccountCircleIcon /></ListItemIcon>
               <ListItemText primary='Account'/>
             </ListItem>
           </Link>
-          <ListItem button key='Logout' onClick={login}>
+          <ListItem button key='Logout' onClick={logout}>
               <ListItemIcon><ExitToAppIcon /></ListItemIcon>
               <ListItemText primary='Logout'/>
           </ListItem>
@@ -202,10 +253,10 @@ export default function MiniDrawer() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={Home}/>
-              <Route path='/search' component={SearchPage}/>
+              <Route path='/' exact component={() => <Home token={token} />}/>
+              <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path='/account' component={Account}/>
+              <Route path={'/'+username} component={() => <UserPage user={username} notFollowing={true} />}/>
             </Switch>
       </main>
     </div>
@@ -214,18 +265,33 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      
       <form className={classes.loginPage} noValidate autoComplete="off">
-       
-       <div className={classes.imageWithText}>
-        <img src="/panda.jpg" alt="" ></img>
+        <div className={classes.imageWithText}>
+          <img src="/panda.jpg" alt="" ></img>
         </div>
-        <TextField label="Username" variant="filled" />
-        <div><TextField label="Password" type="password" variant="filled"/> </div>
-        <button onClick={login}>Login</button>
-
+        <TextField
+          id="standard-required"
+          label="Username"
+          variant="filled"
+          onChange={enterUsername}
+          required
+        />
+        <div>
+          <TextField
+            label="Password"
+            type="password"
+            variant="filled"
+            required
+            error={invalidPass}
+            id="standard-password-input"
+            autoComplete="current-password"
+            onChange={enterPassword}
+          />
+        </div>
+        <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
+          Login / Register
+        </Button>
       </form>
-      
     );
   }
 }
@@ -235,17 +301,7 @@ class Home extends Component {
     return (
 
       <Typography variant="h6" noWrap>
-          Home Page
-      </Typography>
-    );
-  }
-}
-
-class Account extends Component {
-  render() {
-    return (
-      <Typography variant="h6" noWrap>
-          Account Page
+        {this.props.token}
       </Typography>
     );
   }
