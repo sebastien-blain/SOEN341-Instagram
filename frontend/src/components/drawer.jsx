@@ -22,10 +22,6 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-
-
-
-
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
