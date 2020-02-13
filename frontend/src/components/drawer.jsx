@@ -34,25 +34,19 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    '& > *':{
     display: 'flex',
-    margin: theme.spacing(1),
-    width: 200,
-    
-  }
-},
-loginPage:{
-  flex:1,
-  textAlign:'center',
-  backgroundColor: 'white',
-},
-imageWithText:{
-fontFamily:'Arial',
-
-},
-first:{
-  position:'absolute',
-},
+  },
+  loginPage:{
+    flex:1,
+    textAlign:'center',
+    backgroundColor: 'white',
+  },
+  imageWithText:{
+    fontFamily:'Arial',
+  },
+  first:{
+    position:'absolute',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -227,12 +221,12 @@ export default function MiniDrawer() {
       
       <form className={classes.loginPage} noValidate autoComplete="off">
        
-       <div class={classes.imageWithText}>
+       <div className={classes.imageWithText}>
         <img src="/panda.jpg" alt="" ></img>
         </div>
-        <TextField id="filled-basic" label="Username" variant="filled" />
-        <div><TextField id="filled-basic" label="Password" input type="password" variant="filled"/> </div>
-  <button onClick={login}><centre>Login</centre></button>
+        <TextField label="Username" variant="filled" />
+        <div><TextField label="Password" type="password" variant="filled"/> </div>
+        <button onClick={login}>Login</button>
 
       </form>
       
