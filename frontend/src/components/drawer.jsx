@@ -109,6 +109,7 @@ const useStyles = makeStyles(theme => ({
 export default function MiniDrawer() {
   const classes = useStyles();
   const theme = useTheme();
+  const location = window.navigator && window.navigator.geolocation
   const [open, setOpen] = React.useState(false);
   const [loggedin, setLoggedin] = React.useState(false);
   const [username, setUsername] = React.useState(undefined);
@@ -117,6 +118,9 @@ export default function MiniDrawer() {
   const [invalidPass, setInvalidPass] = React.useState(false);
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
+
+  location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);})
+  location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);})
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,19 +139,9 @@ export default function MiniDrawer() {
   }
 
   const login = () => {
-    const location = window.navigator && window.navigator.geolocation
-    if (location) {
-      location.getCurrentPosition((position) => {
-        setLatitude(position.coords.latitude);
-        setLongitude(position.coords.longitude);
-      }, (error) => {
-        this.setState({ latitude: 'err-latitude', longitude: 'err-longitude' })
-      })
-    }
-
     let body = JSON.stringify({
       username: username,
-      password: password,
+      password: password
     });
     console.log(body);
     fetch(usedApi+'/login', {
