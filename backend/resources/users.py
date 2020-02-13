@@ -46,7 +46,8 @@ class LoginApi(Resource):
         if is_empy_or_none(body):
             return {'error': 'A field is empty or None'}, 400
 
-        user = User.objects(username=body.get('username')).first()
+        username = body.get('username').strip()
+        user = User.objects(username=username).first()
         if user is None:
             new_user = {
                 'username': body.get('username'),
