@@ -7,6 +7,7 @@ class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
     pictures = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
+    nb_pictures = db.IntField()
     nb_followers = db.IntField()
     followers = db.ListField(db.ReferenceField('User'), reverse_delete_rule=db.PULL)
     nb_following = db.IntField()

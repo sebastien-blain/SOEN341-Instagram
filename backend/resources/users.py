@@ -54,6 +54,7 @@ class LoginApi(Resource):
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
+                'nb_pictures': 0
             }
             new_user = User(**new_user)
             new_user.hash_password()
