@@ -55,7 +55,7 @@ class LoginApi(Resource):
                 'nb_followers': 0,
                 'nb_following': 0,
                 'nb_pictures': 0,
-                'bio': ''
+                'bio': 'Welcome to mypanda space!!',
             }
             new_user = User(**new_user)
             new_user.hash_password()
