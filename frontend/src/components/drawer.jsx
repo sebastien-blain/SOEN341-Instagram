@@ -271,7 +271,16 @@ export default function MiniDrawer() {
               <Route path='/' exact component={() => <Home token={token} />}/>
               <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path={'/'+username} component={() => <UserPage user={username} notFollowing={true} />}/>
+              <Route path={'/'+username} 
+                component={() => 
+                  <UserPage 
+                    user={username}
+                    token={token}
+                    usedApi={usedApi}
+                    notFollowing={true}
+                    isUser={true}
+                  />}
+              />
             </Switch>
       </main>
     </div>
