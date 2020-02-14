@@ -3,8 +3,14 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import Message from '@material-ui/icons/Message';
 import Close from '@material-ui/icons/Close';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
   },
   table: {
-    margin: theme.spacing(1),
+    minWidth: 650,
   },
 }));
 
@@ -25,17 +31,38 @@ export default class UserPage extends Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    this.state = { classes: useStyles, notFollowing: this.props.notFollowing, isUser: this.props.isUser};
+    this.state = {
+      classes: useStyles,
+      isFollowing: this.props.isFollowing,
+      nbFollowers: 0,
+      nbFollowing: 0,
+      nbPost: 0
+    };
+    console.log(this.state.isFollowing)
+  }
+
+  componentDidMount() {
+    fetch(this.props.usedApi+'/user/'+this.props.user, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+this.props.token
+      }
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson)
+      this.setState(() => {
+        return ({
+          nbFollowers: responseJson.nb_followers,
+          nbFollowing: responseJson.nb_following,
+          nbPost: responseJson.nb_pictures,
+        });
+      });
+    })
   }
 
   follow = () => {
-    this.setState(() => {
-      return(
-        {
-          notFollowing: true
-        }
-      )
-    })
     fetch(this.props.usedApi+'/follow', {
       method: 'POST',
       headers: {
@@ -48,6 +75,42 @@ export default class UserPage extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
+      this.setState(() => {
+        return(
+          {
+            isFollowing: true,
+            nbFollowers: this.state.nbFollowers + 1,
+          }
+        )
+      })
+      console.log(responseJson);
+    })
+    .catch((e) =>  {
+      console.log(e)
+    })
+  }
+
+  unfollow = () => {
+    fetch(this.props.usedApi+'/unfollow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+this.props.token
+      },
+      body: JSON.stringify({
+        unfollow: this.props.user
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState(() => {
+        return(
+          {
+            isFollowing: false,
+            nbFollowers: this.state.nbFollowers - 1,
+          }
+        )
+      })
       console.log(responseJson);
     })
     .catch((e) =>  {
@@ -57,66 +120,60 @@ export default class UserPage extends Component {
   
   render() {
     return (
-          <div>
-             <Typography variant="h4" noWrap>
-              <p><strong>{this.props.user}</strong></p>
-            </Typography>
-            <Typography variant="body1" align="left" paragraph="true">
-              <table col width="500">
-                <tr>
-                  <td>{this.follow.length}</td>
-                  <td>{this.follow.length}</td>
-                  <td>{this.follow.length}</td>
-                </tr>
-                <tr>
-                  <td>Posts</td>
-                  <td>Followers</td>
-                  <td>Following</td>
-                </tr>
-              </table>
-            </Typography>
-            <Typography variant="caption" noWrap paragraph="true">
-            <textarea id="bio" cols="60" disabled maxlength="200">
-            *Profile bio* This is a profile bio 
-            </textarea>
-            </Typography>
-            <p>Followed by .... </p>
-            <div>
-              {//this.state.isUser &&
-                <div>
-                <Button
-                variant="contained"
-                color="primary"
-                className={this.state.classes.button}
-                startIcon={<PersonAddIcon />}
-                onClick={this.follow}
-                disabled={!this.state.notFollowing}
-                >
-                  Follow
-                </Button>
-
-                <Button
-                variant="contained"
-                color="secondary"
-                className={this.state.classes.button}
-                startIcon={<Close />}
-                onClick={this.unfollow}
-                disabled={this.state.notFollowing}
-                >
-                  Unfollow
-                </Button>
-
-                <Button
-                variant="contained"
-                color="default"
-                className={this.state.classes.button}
-                startIcon={<Message />}
-                onClick={this.message}
-                >
-                  Message
-                </Button>
-                </div>}
-            </div>
+      <div>
+        <Typography variant="h4" noWrap>
+          {this.props.user}
+        </Typography>
+        <br/>
+        <div>
+          <TableContainer component={Paper}>
+            <Table className={this.state.classes.table} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center">Post</TableCell>
+                  <TableCell align="center">Followers</TableCell>
+                  <TableCell align="center">Following</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                  <TableRow>
+                    <TableCell align="center">{this.state.nbPost}</TableCell>
+                    <TableCell align="center">{this.state.nbFollowers}</TableCell>
+                    <TableCell align="center">{this.state.nbFollowing}</TableCell>
+                  </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        <br/>
+        <textarea id="bio" cols={60} maxLength={200} placeholder='*Profile bio* This is a profile bio' >
+        </textarea>
+        <p>Followed by .... </p>
+            {!this.props.isUser ? 
+              <div>
+                {!this.state.isFollowing ? 
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={this.state.classes.button}
+                    startIcon={<PersonAddIcon />}
+                    onClick={this.follow}
+                  >
+                    Follow
+                  </Button>
+                :
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={this.state.classes.button}
+                    startIcon={<Close />}
+                    onClick={this.unfollow}
+                  >
+                    Unfollow
+                  </Button>
+                } 
+              </div> : <div></div>
+            }
             <hr />
             <p>*IMAGE SECTION</p>
           </div>
