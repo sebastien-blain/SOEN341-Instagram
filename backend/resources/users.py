@@ -54,6 +54,7 @@ class LoginApi(Resource):
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
+                'nb_pictures': 0
             }
             new_user = User(**new_user)
             new_user.hash_password()
@@ -105,6 +106,48 @@ class FollowUserApi(Resource):
         new_follower.update(nb_followers=new_follower.nb_followers + 1)
 
         return {'message': 'User {} is now following {}'.format(current_user.username, new_follower.username)}, 200
+
+
+class UnfollowUserApi(Resource):
+    @jwt_required
+    def post(self):
+        body = request.get_json()
+        fields = ['unfollow']
+        if not fields_are_in(body, fields):
+            return {'error': 'Missing a field'}, 400
+        if is_empy_or_none(body):
+            return {'error': 'A field is empty or None'}, 400
+
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+        
+        # Get the user we want to unfollow
+        new_follower = User.objects(username=body.get('unfollow')).first()
+        if new_follower is None:
+            return {'error': 'User {} does not exist'.format(body.get('unfollow'))}, 401
+
+        if new_follower.username == current_user.username:
+            return {'error': 'User cannot unfollow itself'}, 401
+
+        following = False
+        for f in current_user.following:
+            if f == new_follower:
+                following = True
+                break
+
+        if not following:
+            return {'error': 'User cannot unfollow a user that he does not follow'}, 401
+
+        User.objects(id=user_id).update_one(pull__following=new_follower)
+        User.objects(username=body.get('unfollow')).update_one(pull__followers=current_user)
+        current_user.update(nb_following=current_user.nb_following - 1)
+        new_follower.update(nb_followers=new_follower.nb_followers - 1)
+
+        return {'message': 'User {} has unfollow {}'.format(current_user.username, new_follower.username)}, 200
 
 
 class SearchUserAPI(Resource):

@@ -36,6 +36,7 @@ class PostPictureAPI(Resource):
         picture.save()
 
         User.objects(id=user_id).update_one(push__pictures=picture)
+        User.objects(id=user_id).update_one(nb_pictures=current_user.nb_pictures + 1)
 
         User.objects(following__in=[current_user]).update_one(push__image_queue=picture)
 
