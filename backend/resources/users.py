@@ -214,7 +214,7 @@ class UserInfoAPI(Resource):
 
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
-class updateBioAPI(Resource):
+class UpdateBioAPI(Resource):
     @jwt_required
     def post(self):
         body = request.get_json()
@@ -230,6 +230,7 @@ class updateBioAPI(Resource):
 
         if current_user is None:
             return {'error': 'Header token is not good, please login again'}, 401
+            
         bio = body.get('bio').strip()
         current_user.update_one(bio=bio)
         return {'message': 'Bio was sucessfully updated'}, 200
