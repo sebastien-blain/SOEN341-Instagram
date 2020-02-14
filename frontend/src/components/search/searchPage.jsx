@@ -129,7 +129,7 @@ export default class SearchPage extends Component {
             </Link>
             <br/>
             <br/>
-            <UserPage user={this.state.chosenUser.username} token={this.props.token} notFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
+            <UserPage user={this.state.chosenUser.username} isUser={false} token={this.props.token} isFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
           </div>
         </Router>
       );
