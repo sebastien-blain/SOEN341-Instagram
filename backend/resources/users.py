@@ -230,9 +230,9 @@ class UpdateBioAPI(Resource):
 
         if current_user is None:
             return {'error': 'Header token is not good, please login again'}, 401
-            
+
         bio = body.get('bio').strip()
-        current_user.update_one(bio=bio)
+        current_user.update(bio=bio)
         return {'message': 'Bio was sucessfully updated'}, 200
         
 
