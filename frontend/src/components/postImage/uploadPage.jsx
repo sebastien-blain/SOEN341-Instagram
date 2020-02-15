@@ -133,7 +133,7 @@ export default function VerticalLinearStepper() {
       <Step key={steps[2]}>
         <StepLabel>{steps[2]}</StepLabel>
         <StepContent>
-          <img src={selectedFile} alt="preview image" style={{width:300,height:300, objectFit:'cover'}}/>
+          <img src={selectedFile} alt="preview" style={{width:300,height:300, objectFit:'cover'}}/>
           <Typography>
             Preview of the post will be shown here
             Confirm upload
