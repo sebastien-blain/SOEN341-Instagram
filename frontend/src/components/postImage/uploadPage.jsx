@@ -87,6 +87,7 @@ export default function VerticalLinearStepper() {
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
+                disabled={!selectedFile}
               >
                 Next
               </Button>
@@ -121,6 +122,7 @@ export default function VerticalLinearStepper() {
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
+                disabled={!description}
               >
                 Next
               </Button>
