@@ -54,7 +54,8 @@ class LoginApi(Resource):
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
-                'nb_pictures': 0
+                'nb_pictures': 0,
+                'bio': ''
             }
             new_user = User(**new_user)
             new_user.hash_password()
@@ -213,6 +214,27 @@ class UserInfoAPI(Resource):
 
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
+class UpdateBioAPI(Resource):
+    @jwt_required
+    def post(self):
+        body = request.get_json()
+        fields = ['bio']
+        if not fields_are_in(body, fields):
+            return {'error': 'Missing a field'}, 400
+        if is_empy_or_none(body):
+            return {'error': 'A field is empty or None'}, 400
+
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+            
+        bio = body.get('bio').strip()
+        current_user.update_one(bio=bio)
+        return {'message': 'Bio was sucessfully updated'}, 200
+        
 
 # Search an account route, will return a list of user with almost same name
 

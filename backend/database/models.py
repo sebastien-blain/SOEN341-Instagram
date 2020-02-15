@@ -6,6 +6,7 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
+    bio = db.StringField()
     pictures = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
     nb_pictures = db.IntField()
     nb_followers = db.IntField()
