@@ -118,7 +118,6 @@ export default class SearchPage extends Component {
           <div>
             <Link to={'/search'} style={{ textDecoration: 'none', color: 'black' }}>
               <Button
-              variant="contained"
               color="primary"
               className={this.state.classes.button}
               startIcon={<ArrowBackIcon />}
