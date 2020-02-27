@@ -23,7 +23,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
-import ImageBox from './images/imageBox';
+import ImageListPage from './images/ImageListPage';
 
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SearchPage from './search/searchPage';
@@ -111,28 +111,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MiniDrawer() {
-
-  //#region mockImageForTest
-  const mockImage = {
-    user: "www.instagram.com/Bob",
-    post: "www.instagram.com/Bob",
-    url: "https://i.redd.it/z9l08cn8wde41.png",
-    repost: "false",
-    description: "This is the caption",
-    comments: [
-      {
-        user: "Mia",
-        comment: "Nice pic"
-      },
-      {
-        user: "Khalifa",
-        comment: "Cool pic"
-      },
-    ],
-    date: "jan 23 2020"
-  }
-  //#endregion
-
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -296,7 +274,7 @@ export default function MiniDrawer() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={() => <ImageBox image={mockImage} token={token}/>} />
+              <Route path='/' exact component={() => <ImageListPage page={'home'} currentUser={username} token={token}/>} />
               <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
               <Route path={'/'+username} 

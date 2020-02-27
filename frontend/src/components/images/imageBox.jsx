@@ -13,6 +13,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import CommentIcon from '@material-ui/icons/Comment';
 import Comment from './imageBox/Comment'
 
+
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 //#region style
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -45,38 +54,95 @@ const useStyles = makeStyles(theme => ({
 const ImageBox = (props) => {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
+	const [liked, setLiked] = React.useState(props.image.like);
+	const [open, setOpen] = React.useState(false);
+	const [comments, setComments] = React.useState(props.image.comments);
+	const [currentComment, setCurrentComment] = React.useState(undefined);
+
+	const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
+
+	const updateLike = () => {
+		setLiked(!liked);
+	}
+
+	const updateComment = (e) => {
+		setCurrentComment(e.target.value);
+	}
+
+	const leaveComment = () => {
+		let tempComment = comments;
+		tempComment.push(
+			{
+				user: props.currentUser,
+				comment: currentComment
+			}
+		);
+		console.log(tempComment);
+		setComments(tempComment);
+		setOpen(false);
+	}
+
 	return (
 		<Card className={classes.root}>
-			<Typography className={classes.root}>
+			<Typography variant="h5" style={{padding: '10px 20px 10px 20px'}}>
 				{props.image.user}
 			</Typography>
-			<Typography className={classes.subtext}>
-				{props.image.post}
-			</Typography>
+
 			<CardMedia
 				className={classes.media}
-				image={props.image.url}     //"https://i.redd.it/z9l08cn8wde41.png"
+				image={props.image.url}
 				title=""
 			/>
+
 			<CardContent>
-				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
-					*Liked by...*
-				</Typography>
 				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
 					{props.image.description}
 				</Typography>
 			</CardContent>
+
 			<CardActions disableSpacing>
-				<IconButton aria-label="like">
+				<IconButton aria-label="like" style={liked ? {color: 'red'} : {color: 'black'}} onClick={updateLike}>
 					<FavoriteIcon />
 				</IconButton>
-				<IconButton aria-label="comment">
+				<IconButton aria-label="comment" onClick={handleClickOpen}>
 					<CommentIcon />
 				</IconButton>
+
+				<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" fullWidth maxWidth={false}>
+        	<DialogContent>
+						<DialogContentText>
+							Type a comment here
+						</DialogContentText>
+						<TextField
+							autoFocus
+							margin="dense"
+							id="name"
+							label="Comment"
+							type="text"
+							fullWidth
+							onChange={updateComment}
+						/>
+        	</DialogContent>
+        	<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							Cancel
+						</Button>
+						<Button onClick={leaveComment} color="primary">
+							Comment
+						</Button>
+        	</DialogActions>
+      	</Dialog>
+
 				<IconButton
 					className={clsx(classes.expand, {
 						[classes.expandOpen]: expanded,
@@ -85,13 +151,13 @@ const ImageBox = (props) => {
 					aria-expanded={expanded}
 					aria-label="show more"
 				>
-				<ExpandMoreIcon />
+					<ExpandMoreIcon />
 				</IconButton>
 			</CardActions>
 			<Collapse in={expanded} timeout="auto" unmountOnExit>
 				<CardContent>
 					<div>
-						{props.image.comments.map( (comment, index) => {
+						{comments.map( (comment, index) => {
 							return (
 								<Comment user={comment.user} comment={comment.comment} key={index}/>
 							)
