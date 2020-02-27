@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { Component } from 'react';
+=======
+import React, {Component, useEffect} from 'react';
+>>>>>>> master
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -32,7 +36,7 @@ import UserPage from './user/userPage';
 
 import config from '../config';
 
-const usedApi = config.devApi;
+const usedApi = config.prodApi;
 
 const drawerWidth = 240;
 
@@ -41,6 +45,17 @@ const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
+  },
+  loginPage:{
+    flex:1,
+    textAlign:'center',
+    backgroundColor: 'white',
+  },
+  imageWithText:{
+    fontFamily:'Arial',
+  },
+  first:{
+    position:'absolute',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -130,6 +145,20 @@ export default function MiniDrawer() {
   const [password, setPassword] = React.useState(undefined);
   const [token, setToken] = React.useState(undefined);
   const [invalidPass, setInvalidPass] = React.useState(false);
+  const [longitude, setLongitude] = React.useState(undefined);
+  const [latitude, setLatitude] = React.useState(undefined);
+  const [bio, setBio] = React.useState(undefined);
+
+  useEffect(() => {
+    const location = window.navigator && window.navigator.geolocation;
+    try {
+      location.getCurrentPosition( (position) => {setLongitude(position.coords.longitude);});
+      location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);});
+    }
+    catch(e) {
+      console.log('failed')
+    }
+  });
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -150,7 +179,7 @@ export default function MiniDrawer() {
   const login = () => {
     let body = JSON.stringify({
       username: username,
-      password: password,
+      password: password
     });
     console.log(body);
     fetch(usedApi+'/login', {
@@ -161,6 +190,8 @@ export default function MiniDrawer() {
       body: JSON.stringify({
         username: username,
         password: password,
+        latitude: latitude,
+        longitude: longitude
       }),
     })
     .then((response) => response.json())
@@ -169,6 +200,7 @@ export default function MiniDrawer() {
       if(responseJson.token !== undefined) {
         console.log('logged in')
         setLoggedin(true);
+        setBio(responseJson.bio);
       }
       else {
         setInvalidPass(true);
@@ -271,7 +303,17 @@ export default function MiniDrawer() {
               <Route path='/' exact component={() => <ImageBox image={mockImage} token={token}/>} />
               <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path={'/'+username} component={() => <UserPage user={username} notFollowing={true} />}/>
+              <Route path={'/'+username} 
+                component={() => 
+                  <UserPage 
+                    user={username}
+                    token={token}
+                    usedApi={usedApi}
+                    notFollowing={true}
+                    isUser={true}
+                    bio={bio}
+                  />}
+              />
             </Switch>
           </main>
         </div>
@@ -280,25 +322,35 @@ export default function MiniDrawer() {
   }
   else {
     return (
-      <div>
-        <TextField required id="standard-required" label="Username" onChange={enterUsername} />
-        <br/>
+      <form className={classes.loginPage} noValidate autoComplete="off">
+        <div className={classes.imageWithText}>
+          <img src="/panda.jpg" alt="" ></img>
+        </div>
         <br/>
         <TextField
+          id="standard-required"
+          label="Username"
+          variant="filled"
+          onChange={enterUsername}
           required
-          error={invalidPass}
-          id="standard-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={enterPassword}
         />
-        <br/>
+        <div>
+          <TextField
+            label="Password"
+            type="password"
+            variant="filled"
+            required
+            error={invalidPass}
+            id="standard-password-input"
+            autoComplete="current-password"
+            onChange={enterPassword}
+          />
+        </div>
         <br/>
         <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
           Login / Register
         </Button>
-      </div>
+      </form>
     );
   }
 }

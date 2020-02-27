@@ -62,7 +62,9 @@ export default class SearchPage extends Component {
       this.setState(() => {
         return {
           allList: responseJson,
-          userlist: responseJson
+          userlist: responseJson,
+          userDefined: false,
+          chosenUser: undefined
         };
       })
     })
@@ -71,20 +73,12 @@ export default class SearchPage extends Component {
       this.setState(() => {
         return {
           allList: MockSearch,
-          userlist: MockSearch
+          userlist: MockSearch,
+          userDefined: false,
+          chosenUser: undefined
         };
       })
     })
-  }
-
-  backtoSearch = () => {
-    this.setState(()=>{
-      return {
-        userlist: this.state.allList,
-        userDefined: false,
-        chosenUser: undefined
-      }
-    });
   }
 
   updateUser(text){
@@ -100,7 +94,7 @@ export default class SearchPage extends Component {
         <Router>
           <div>
             <form className={this.state.classes.root} noValidate autoComplete="off">
-              <TextField id="outlined-basic" label="Search" variant="outlined" onKeyUp={this.preciseSearch}/>
+              <TextField id="outlined-basic" label="Search" variant="outlined" onFocus={this.updateList} onKeyUp={this.preciseSearch}/>
             </form>
             <div style={{marginTop:'30px'}}>
               {this.state.userlist.map((text, index) => (
@@ -124,18 +118,17 @@ export default class SearchPage extends Component {
           <div>
             <Link to={'/search'} style={{ textDecoration: 'none', color: 'black' }}>
               <Button
-              variant="contained"
               color="primary"
               className={this.state.classes.button}
               startIcon={<ArrowBackIcon />}
-              onClick={this.backtoSearch}
+              onClick={this.updateList}
               >
                 Back to Search
               </Button>
             </Link>
             <br/>
             <br/>
-            <UserPage user={this.state.chosenUser.username} token={this.props.token} notFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
+            <UserPage user={this.state.chosenUser.username} isUser={false} token={this.props.token} isFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
           </div>
         </Router>
       );

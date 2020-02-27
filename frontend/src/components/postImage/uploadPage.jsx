@@ -50,7 +50,8 @@ export default function VerticalLinearStepper() {
   };
 
   const fileSelectedHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
+    console.log(event.target.files[0])
+    setSelectedFile(URL.createObjectURL(event.target.files[0]));
   }
 
   const getDescription = (event) => {
@@ -86,6 +87,7 @@ export default function VerticalLinearStepper() {
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
+                disabled={!selectedFile}
               >
                 Next
               </Button>
@@ -120,6 +122,7 @@ export default function VerticalLinearStepper() {
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
+                disabled={!description}
               >
                 Next
               </Button>
@@ -132,6 +135,7 @@ export default function VerticalLinearStepper() {
       <Step key={steps[2]}>
         <StepLabel>{steps[2]}</StepLabel>
         <StepContent>
+          <img src={selectedFile} alt="preview" style={{width:300,height:300, objectFit:'cover'}}/>
           <Typography>
             Preview of the post will be shown here
             Confirm upload
