@@ -55,21 +55,23 @@ class LoginApi(Resource):
                 'nb_followers': 0,
                 'nb_following': 0,
                 'nb_pictures': 0,
-                'bio': ''
+                'bio': 'Welcome to mypanda space!!',
             }
             new_user = User(**new_user)
             new_user.hash_password()
             new_user.save()
             expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(new_user.id), expires_delta=expires)
-            return {'token': access_token}, 200
+            return {'token': access_token,
+                    'bio': new_user.bio}, 200
         authorized = user.check_password(body.get('password'))
         if not authorized:
             return {'error': 'Password does not match username'}, 401
         if authorized:
             expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
-            return {'token': access_token}, 200
+            return {'token': access_token,
+                    'bio': user.bio}, 200
 
 
 class FollowUserApi(Resource):
@@ -230,9 +232,9 @@ class UpdateBioAPI(Resource):
 
         if current_user is None:
             return {'error': 'Header token is not good, please login again'}, 401
-            
+
         bio = body.get('bio').strip()
-        current_user.update_one(bio=bio)
+        current_user.update(bio=bio)
         return {'message': 'Bio was sucessfully updated'}, 200
         
 
