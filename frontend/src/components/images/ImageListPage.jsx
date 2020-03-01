@@ -16,6 +16,7 @@ export default class ImageListPage extends Component {
     user: "Bob",
     url: "https://i.redd.it/z9l08cn8wde41.png",
     like: true,
+    nb_like: 10,
     description: "This is the caption",
     comments: [
       {

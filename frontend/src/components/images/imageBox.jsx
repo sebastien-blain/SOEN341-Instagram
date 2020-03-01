@@ -57,6 +57,7 @@ const ImageBox = (props) => {
 	const [open, setOpen] = React.useState(false);
 	const [comments, setComments] = React.useState(props.image.comments);
 	const [currentComment, setCurrentComment] = React.useState(undefined);
+	const [numLike, setNumLike] = React.useState(props.image.nb_like);
 
 	const handleClickOpen = () => {
     setOpen(true);
@@ -71,6 +72,12 @@ const ImageBox = (props) => {
 	};
 
 	const updateLike = () => {
+		if(liked){
+			setNumLike(numLike - 1);
+		}
+		else{
+			setNumLike(numLike + 1);
+		}
 		setLiked(!liked);
 	}
 
@@ -110,6 +117,9 @@ const ImageBox = (props) => {
 			</CardContent>
 
 			<CardActions disableSpacing>
+				<Typography variant="h6">
+					{numLike}
+				</Typography>
 				<IconButton aria-label="like" style={liked ? {color: 'red'} : {color: 'black'}} onClick={updateLike}>
 					<FavoriteIcon />
 				</IconButton>
