@@ -7,14 +7,16 @@ class User(db.Document):
     username = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
     bio = db.StringField()
-    pictures = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
     nb_pictures = db.IntField()
+    pictures = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
     nb_followers = db.IntField()
     followers = db.ListField(db.ReferenceField('User'), reverse_delete_rule=db.PULL)
     nb_following = db.IntField()
     following = db.ListField(db.ReferenceField('User'), reverse_delete_rule=db.PULL)
     image_queue = db.ListField(db.ReferenceField('Picture'), reverse_delete_rule=db.PULL)
-
+    nb_login = db.IntField()
+    dates = db.ListField(db.StringField())
+    
     def hash_password(self):
         self.password = generate_password_hash(self.password).decode('utf-8')
 
