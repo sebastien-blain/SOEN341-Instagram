@@ -1,5 +1,5 @@
 from .users import LoginApi, DefaultPage, SearchUserAPI, FollowUserApi, FeedAPI, UserInfoAPI, UnfollowUserApi, UpdateBioAPI
-from .pictures import PostPictureAPI
+from .pictures import PostPictureAPI, PostCommentAPI
 
 
 def initialize_routes(api):
@@ -12,3 +12,4 @@ def initialize_routes(api):
     api.add_resource(SearchUserAPI, '/search')
     api.add_resource(UserInfoAPI, '/user/<username>')
     api.add_resource(UpdateBioAPI, '/user/update/bio')
+    api.add_resource(PostCommentAPI, '/picture/comment')
