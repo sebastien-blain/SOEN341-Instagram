@@ -21,7 +21,6 @@ Possible return message:
 ```
 [
     {
-        "owner": "Sebastien",
         "user": "Sebastien",
         "link": "www.panda.space",
         "message": "Yep this is me",
@@ -48,7 +47,6 @@ Possible return message:
         "id": "5e5b0170e7105f841b06a142"
     },
     {
-        "owner": "Sebastien",
         "user": "Sebastien",
         "link": "www.panda.space",
         "message": "Super duper good pic ",
@@ -58,7 +56,6 @@ Possible return message:
         "id": "5e5b01090088ee88755f2daf"
     },
     {
-        "owner": "Sebastien",
         "user": "Sebastien",
         "link": "www.panda.space",
         "message": "This is my third ",

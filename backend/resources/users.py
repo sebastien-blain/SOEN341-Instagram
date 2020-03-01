@@ -237,14 +237,12 @@ class UserInfoAPI(Resource):
             user_info['pictures'][pic]['id'] = user_info['pictures'][pic]['_id']['$oid']
             del user_info['pictures'][pic]['_id']
             del user_info['pictures'][pic]['date']
-            
+            del user_info['pictures'][pic]['owner']
             for com in range(len(user_info['pictures'][pic]['comments'])):
                 user_info['pictures'][pic]['comments'][com] = json.loads(Comment.objects(id=user_info['pictures'][pic]['comments'][com]['$oid']).first().to_json())
                 del user_info['pictures'][pic]['comments'][com]['_id']
         user_info['pictures'] = user_info['pictures'][::-1]
-
-
-
+        
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
 
