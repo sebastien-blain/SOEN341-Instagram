@@ -93,7 +93,6 @@ const ImageBox = (props) => {
 				comment: currentComment
 			}
 		);
-		console.log(tempComment);
 		setComments(tempComment);
 		setOpen(false);
 	}
