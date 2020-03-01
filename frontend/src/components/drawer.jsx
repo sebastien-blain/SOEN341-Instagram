@@ -122,6 +122,7 @@ export default function MiniDrawer() {
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
   const [bio, setBio] = React.useState(undefined);
+  const [feed, setFeed] = React.useState([]);
 
   useEffect(() => {
     const location = window.navigator && window.navigator.geolocation;
@@ -151,11 +152,6 @@ export default function MiniDrawer() {
   }
 
   const login = () => {
-    let body = JSON.stringify({
-      username: username,
-      password: password
-    });
-    console.log(body);
     fetch(usedApi+'/login', {
       method: 'POST',
       headers: {
@@ -172,9 +168,23 @@ export default function MiniDrawer() {
     .then((responseJson) => {
       setToken(responseJson.token);
       if(responseJson.token !== undefined) {
-        console.log('logged in')
         setLoggedin(true);
         setBio(responseJson.bio);
+        fetch(usedApi+'/feed', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+responseJson.token
+          }
+        })
+        .then((response2) => response2.json())
+        .then((responseJson2) => {
+          setFeed(responseJson2);
+        })
+        .catch((e) =>  {
+          console.log(e);
+          setFeed([])
+        })
       }
       else {
         setInvalidPass(true);
@@ -274,19 +284,33 @@ export default function MiniDrawer() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={() => <ImageListPage page={'home'} currentUser={username} token={token}/>} />
-              <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
-              <Route path='/upload' component={VerticalLinearStepper}/>
-              <Route path={'/'+username} 
-                component={() => 
-                  <UserPage 
-                    user={username}
-                    token={token}
-                    usedApi={usedApi}
-                    notFollowing={true}
-                    isUser={true}
-                    bio={bio}
-                  />}
+              <Route path='/' exact component={() =>
+                <ImageListPage 
+                  images={feed}
+                  currentUser={username}
+                  usedApi={usedApi}
+                  token={token}/>}
+              />
+              <Route path='/search' component={() =>
+                <SearchPage
+                  token={token}
+                  currentUser={username}
+                  usedApi={usedApi}/>}
+              />
+              <Route path='/upload' component={() =>
+                <VerticalLinearStepper
+                  usedApi={usedApi}
+                  token={token}
+                  currentUser={username}/>}
+              />
+              <Route path={'/'+username} component={() =>
+                <UserPage 
+                  user={username}
+                  token={token}
+                  usedApi={usedApi}
+                  notFollowing={true}
+                  isUser={true}
+                  bio={bio}/>}
               />
             </Switch>
           </main>

@@ -83,7 +83,6 @@ export default class SearchPage extends Component {
 
   updateUser(text){
     let name = text
-    console.log(text);
     this.setState(() => {return {userDefined: true}});
     this.setState(() => {return {chosenUser: name}});
   }
@@ -128,7 +127,7 @@ export default class SearchPage extends Component {
             </Link>
             <br/>
             <br/>
-            <UserPage user={this.state.chosenUser.username} isUser={false} token={this.props.token} isFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
+            <UserPage user={this.state.chosenUser.username} currentUser={this.props.currentUser} isUser={false} token={this.props.token} isFollowing={this.state.chosenUser.already_follow} usedApi={this.props.usedApi} />
           </div>
         </Router>
       );

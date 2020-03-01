@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
+import ImageBox from '../images/imageBox';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,11 +31,12 @@ function getSteps() {
   return ['Upload Image', 'Add Description', 'Confirmation'];
 }
 
-export default function VerticalLinearStepper() {
+export default function VerticalLinearStepper(props) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState(undefined);
   const [description, setDescription] = React.useState(undefined);
+  const [mockImage, setMockImage] = React.useState(undefined);
   const steps = getSteps();
 
   const handleNext = () => {
@@ -50,7 +52,6 @@ export default function VerticalLinearStepper() {
   };
 
   const fileSelectedHandler = (event) => {
-    console.log(event.target.files[0])
     setSelectedFile(URL.createObjectURL(event.target.files[0]));
   }
 
@@ -58,9 +59,52 @@ export default function VerticalLinearStepper() {
     setDescription(event.target.value);
   }
 
+  const updateMock = () => {
+    setMockImage(
+      {
+        owner: props.currentUser,
+        link: selectedFile,
+        like: true,
+        nb_likes: 10,
+        message: description,
+        comments: [
+          {
+            user: "Spongebob",
+            message: "That is such a beautiful picture!!"
+          },
+          {
+            user: "Squidward",
+            message: "Meh, I can do better"
+          },
+        ]
+      }
+    );
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  }
+
   const uploadImages = () => {
-    console.log(selectedFile);
-    console.log(description);
+
+    //Missing aws link here
+
+    fetch(props.usedApi+'/post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+props.token
+      },
+      body: JSON.stringify({
+        link: "https://i.pinimg.com/originals/cb/33/49/cb3349b86ca661ca61ae9a36d88d70d4.png",
+        message: description,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((e) =>  {
+      console.log(e)
+    })
+
     handleNext();
   }
 
@@ -120,7 +164,7 @@ export default function VerticalLinearStepper() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleNext}
+                onClick={updateMock}
                 className={classes.button}
                 disabled={!description}
               >
@@ -135,9 +179,8 @@ export default function VerticalLinearStepper() {
       <Step key={steps[2]}>
         <StepLabel>{steps[2]}</StepLabel>
         <StepContent>
-          <img src={selectedFile} alt="preview" style={{width:300,height:300, objectFit:'cover'}}/>
+          <ImageBox image={mockImage} mock={true}/>
           <Typography>
-            Preview of the post will be shown here
             Confirm upload
           </Typography>
           <div className={classes.actionsContainer}>

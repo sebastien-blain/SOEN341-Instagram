@@ -12,6 +12,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+
+import ImageListPage from '../images/ImageListPage';
 //main page
 const useStyles = makeStyles(theme => ({
   root: {
@@ -35,9 +37,9 @@ export default class UserPage extends Component {
       nbFollowers: 0,
       nbFollowing: 0,
       nbPost: 0,
-      bio: this.props.bio
+      bio: this.props.bio,
+      images: []
     };
-    console.log(this.state.isFollowing)
   }
 
   componentDidMount() {
@@ -50,13 +52,13 @@ export default class UserPage extends Component {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      console.log(responseJson)
       this.setState(() => {
         return ({
           nbFollowers: responseJson.nb_followers,
           nbFollowing: responseJson.nb_following,
           nbPost: responseJson.nb_pictures,
-          bio: responseJson.bio
+          bio: responseJson.bio,
+          images: responseJson.pictures
         });
       });
     })
@@ -190,35 +192,34 @@ export default class UserPage extends Component {
         :
         <Typography variant="h6" noWrap>{this.state.bio}</Typography>
         }
-        <p>Followed by .... </p>
-            {!this.props.isUser ? 
-              <div>
-                {!this.state.isFollowing ? 
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={this.state.classes.button}
-                    startIcon={<PersonAddIcon />}
-                    onClick={this.follow}
-                  >
-                    Follow
-                  </Button>
-                :
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className={this.state.classes.button}
-                    startIcon={<Close />}
-                    onClick={this.unfollow}
-                  >
-                    Unfollow
-                  </Button>
-                } 
-              </div> : <div></div>
-            }
-            <hr />
-            <p>*IMAGE SECTION</p>
-          </div>
-      );
+        {!this.props.isUser ? 
+          <div>
+            {!this.state.isFollowing ? 
+              <Button
+                variant="contained"
+                color="primary"
+                className={this.state.classes.button}
+                startIcon={<PersonAddIcon />}
+                onClick={this.follow}
+              >
+                Follow
+              </Button>
+            :
+              <Button
+                variant="contained"
+                color="secondary"
+                className={this.state.classes.button}
+                startIcon={<Close />}
+                onClick={this.unfollow}
+              >
+                Unfollow
+              </Button>
+            } 
+          </div> : <div></div>
+        }
+        <hr />
+          <ImageListPage images={this.state.images} usedApi={this.props.usedApi} currentUser={this.props.currentUser} token={this.props.token}/>
+      </div>
+    );
   }
 }
