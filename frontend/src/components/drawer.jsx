@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -23,7 +23,9 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
+import ImageListPage from './images/ImageListPage';
+
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
 import UserPage from './user/userPage';
@@ -33,6 +35,8 @@ import config from '../config';
 const usedApi = config.prodApi;
 
 const drawerWidth = 240;
+
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -270,7 +274,7 @@ export default function MiniDrawer() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={() => <Home token={token} />}/>
+              <Route path='/' exact component={() => <ImageListPage page={'home'} currentUser={username} token={token}/>} />
               <Route path='/search' component={() => <SearchPage token={token} usedApi={usedApi}/>}/>
               <Route path='/upload' component={VerticalLinearStepper}/>
               <Route path={'/'+username} 
@@ -285,10 +289,10 @@ export default function MiniDrawer() {
                   />}
               />
             </Switch>
-      </main>
-    </div>
-    </Router>
-  );
+          </main>
+        </div>
+      </Router>
+    );
   }
   else {
     return (
@@ -321,17 +325,6 @@ export default function MiniDrawer() {
           Login / Register
         </Button>
       </form>
-    );
-  }
-}
-
-class Home extends Component {
-  render() {
-    return (
-
-      <Typography variant="h6" noWrap>
-        {this.props.token}
-      </Typography>
     );
   }
 }
