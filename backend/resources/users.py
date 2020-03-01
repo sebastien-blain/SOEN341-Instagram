@@ -116,6 +116,9 @@ class FollowUserApi(Resource):
             if f == new_follower:
                 return {'message': 'User {} is already following {}'.format(current_user.username, new_follower.username)}, 200
 
+        for pic in new_follower.pictures:
+            User.objects(id=user_id).update_one(push__image_queue=pic)
+
         User.objects(id=user_id).update_one(push__following=new_follower)
         User.objects(username=body.get('follow')).update_one(push__followers=current_user)
         current_user.update(nb_following=current_user.nb_following + 1)
@@ -157,6 +160,9 @@ class UnfollowUserApi(Resource):
 
         if not following:
             return {'error': 'User cannot unfollow a user that he does not follow'}, 401
+
+        for pic in new_follower.pictures:
+            User.objects(id=user_id).update_one(pull__image_queue=pic)
 
         User.objects(id=user_id).update_one(pull__following=new_follower)
         User.objects(username=body.get('unfollow')).update_one(pull__followers=current_user)
@@ -242,7 +248,7 @@ class UserInfoAPI(Resource):
                 user_info['pictures'][pic]['comments'][com] = json.loads(Comment.objects(id=user_info['pictures'][pic]['comments'][com]['$oid']).first().to_json())
                 del user_info['pictures'][pic]['comments'][com]['_id']
         user_info['pictures'] = user_info['pictures'][::-1]
-        
+
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
 
