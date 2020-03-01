@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		maxWidth: 345,
 		fontSize: '14px',
+		left: '50%',
+		position: 'relative',
+		transform:'translateX(-50%)'
 	},
 	text: {
 		fontSize: '11px',
@@ -53,11 +56,11 @@ const useStyles = makeStyles(theme => ({
 const ImageBox = (props) => {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
-	const [liked, setLiked] = React.useState(props.image.like);
+	const [liked, setLiked] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
 	const [comments, setComments] = React.useState(props.image.comments);
 	const [currentComment, setCurrentComment] = React.useState(undefined);
-	const [numLike, setNumLike] = React.useState(props.image.nb_like);
+	const [numLike, setNumLike] = React.useState(props.image.nb_likes);
 
 	const handleClickOpen = () => {
     setOpen(true);
@@ -87,31 +90,51 @@ const ImageBox = (props) => {
 
 	const leaveComment = () => {
 		let tempComment = comments;
+		console.log(props.currentUser)
 		tempComment.push(
 			{
 				user: props.currentUser,
-				comment: currentComment
+				message: currentComment
 			}
 		);
 		setComments(tempComment);
+		console.log(props.image.id)
+		fetch(props.usedApi+'/picture/comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+props.token
+      },
+      body: JSON.stringify({
+				picture_id: props.image.id,
+				message: currentComment,
+      }),
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+    })
+    .catch((e) =>  {
+      console.log(e)
+    })
 		setOpen(false);
 	}
 
 	return (
 		<Card className={classes.root}>
 			<Typography variant="h5" style={{padding: '10px 20px 10px 20px'}}>
-				{props.image.user}
+				{props.image.owner}
 			</Typography>
 
 			<CardMedia
 				className={classes.media}
-				image={props.image.url}
+				image={props.image.link}
 				title=""
 			/>
 
 			<CardContent>
 				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
-					{props.image.description}
+					{props.image.message}
 				</Typography>
 			</CardContent>
 
@@ -122,7 +145,7 @@ const ImageBox = (props) => {
 				<IconButton aria-label="like" style={liked ? {color: 'red'} : {color: 'black'}} onClick={updateLike}>
 					<FavoriteIcon />
 				</IconButton>
-				<IconButton aria-label="comment" onClick={handleClickOpen}>
+				<IconButton aria-label="comment" onClick={handleClickOpen} disabled={props.mock}>
 					<CommentIcon />
 				</IconButton>
 
@@ -167,7 +190,7 @@ const ImageBox = (props) => {
 					<div>
 						{comments.map( (comment, index) => {
 							return (
-								<Comment user={comment.user} comment={comment.comment} key={index}/>
+								<Comment user={comment.user} comment={comment.message} key={index}/>
 							)
 						})}
 					</div>
