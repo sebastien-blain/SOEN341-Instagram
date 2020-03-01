@@ -286,6 +286,7 @@ export default function MiniDrawer() {
             <Switch>
               <Route path='/' exact component={() =>
                 <ImageListPage 
+                  isFeed={true}
                   images={feed}
                   currentUser={username}
                   usedApi={usedApi}
