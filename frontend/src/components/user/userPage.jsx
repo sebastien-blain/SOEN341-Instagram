@@ -11,13 +11,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import TextField from '@material-ui/core/TextField';
+//main page
 const useStyles = makeStyles(theme => ({
   root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: 200,
-    },
+    width: '100%',
   },
   button: {
     margin: theme.spacing(1),
@@ -36,7 +34,8 @@ export default class UserPage extends Component {
       isFollowing: this.props.isFollowing,
       nbFollowers: 0,
       nbFollowing: 0,
-      nbPost: 0
+      nbPost: 0,
+      bio: this.props.bio
     };
     console.log(this.state.isFollowing)
   }
@@ -57,6 +56,7 @@ export default class UserPage extends Component {
           nbFollowers: responseJson.nb_followers,
           nbFollowing: responseJson.nb_following,
           nbPost: responseJson.nb_pictures,
+          bio: responseJson.bio
         });
       });
     })
@@ -117,7 +117,34 @@ export default class UserPage extends Component {
       console.log(e)
     })
   }
-  
+
+  submitBio = (e) => {
+    console.log(e.target.value)
+    const text = e.target.value
+
+    fetch(this.props.usedApi+'/user/update/bio', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+this.props.token
+      },
+      body: JSON.stringify({
+        bio: text
+      }),
+    })
+    .then((res) => {
+      console.log(res.json())
+      this.setState(() => {
+        return {
+          bio: text
+        }
+      })
+    })
+    .catch((e) =>  {
+      console.log(e)
+    })
+  }
+
   render() {
     return (
       <div>
@@ -146,8 +173,23 @@ export default class UserPage extends Component {
           </TableContainer>
         </div>
         <br/>
-        <textarea id="bio" cols={60} maxLength={200} placeholder='*Profile bio* This is a profile bio' >
-        </textarea>
+        {this.props.isUser ? 
+        <TextField
+        id="standard-full-width"
+        label="Bio"
+        style={{ margin: 8 }}
+        placeholder={this.state.bio}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        helperText="Update your bio here"
+        onBlur={this.submitBio}
+        />
+        :
+        <Typography variant="h6" noWrap>{this.state.bio}</Typography>
+        }
         <p>Followed by .... </p>
             {!this.props.isUser ? 
               <div>
