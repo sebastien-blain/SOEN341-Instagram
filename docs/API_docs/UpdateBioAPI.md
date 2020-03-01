@@ -4,7 +4,6 @@ Expected header:
 JWT token that identifies to a user
 
 Expected body:
-username of the user to follow
 ```
 {
     "bio": "This is my bio",

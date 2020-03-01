@@ -117,6 +117,7 @@ export default function MiniDrawer() {
   const [invalidPass, setInvalidPass] = React.useState(false);
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
+  const [bio, setBio] = React.useState(undefined);
 
   useEffect(() => {
     const location = window.navigator && window.navigator.geolocation;
@@ -169,6 +170,7 @@ export default function MiniDrawer() {
       if(responseJson.token !== undefined) {
         console.log('logged in')
         setLoggedin(true);
+        setBio(responseJson.bio);
       }
       else {
         setInvalidPass(true);
@@ -279,6 +281,7 @@ export default function MiniDrawer() {
                     usedApi={usedApi}
                     notFollowing={true}
                     isUser={true}
+                    bio={bio}
                   />}
               />
             </Switch>
@@ -293,6 +296,7 @@ export default function MiniDrawer() {
         <div className={classes.imageWithText}>
           <img src="/panda.jpg" alt="" ></img>
         </div>
+        <br/>
         <TextField
           id="standard-required"
           label="Username"
@@ -312,6 +316,7 @@ export default function MiniDrawer() {
             onChange={enterPassword}
           />
         </div>
+        <br/>
         <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
           Login / Register
         </Button>
