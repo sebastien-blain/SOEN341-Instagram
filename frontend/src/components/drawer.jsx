@@ -284,19 +284,33 @@ export default function MiniDrawer() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
             <Switch>
-              <Route path='/' exact component={() => <ImageListPage images={feed} currentUser={username} usedApi={usedApi} token={token}/>} />
-              <Route path='/search' component={() => <SearchPage token={token} currentUser={username} usedApi={usedApi}/>}/>
-              <Route path='/upload' component={() => <VerticalLinearStepper usedApi={usedApi} token={token} currentUser={username}/>}/>
-              <Route path={'/'+username} 
-                component={() => 
-                  <UserPage 
-                    user={username}
-                    token={token}
-                    usedApi={usedApi}
-                    notFollowing={true}
-                    isUser={true}
-                    bio={bio}
-                  />}
+              <Route path='/' exact component={() =>
+                <ImageListPage 
+                  images={feed}
+                  currentUser={username}
+                  usedApi={usedApi}
+                  token={token}/>}
+              />
+              <Route path='/search' component={() =>
+                <SearchPage
+                  token={token}
+                  currentUser={username}
+                  usedApi={usedApi}/>}
+              />
+              <Route path='/upload' component={() =>
+                <VerticalLinearStepper
+                  usedApi={usedApi}
+                  token={token}
+                  currentUser={username}/>}
+              />
+              <Route path={'/'+username} component={() =>
+                <UserPage 
+                  user={username}
+                  token={token}
+                  usedApi={usedApi}
+                  notFollowing={true}
+                  isUser={true}
+                  bio={bio}/>}
               />
             </Switch>
           </main>
