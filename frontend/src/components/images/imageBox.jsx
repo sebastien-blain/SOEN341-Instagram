@@ -61,6 +61,7 @@ const ImageBox = (props) => {
 	const [comments, setComments] = React.useState(props.image.comments);
 	const [currentComment, setCurrentComment] = React.useState(undefined);
 	const [numLike, setNumLike] = React.useState(props.image.nb_likes);
+	const [numComment, setNumComment] = React.useState(props.image.nb_comments);
 
 	const handleClickOpen = () => {
     setOpen(true);
@@ -90,7 +91,6 @@ const ImageBox = (props) => {
 
 	const leaveComment = () => {
 		let tempComment = comments;
-		console.log(props.currentUser)
 		tempComment.push(
 			{
 				user: props.currentUser,
@@ -98,7 +98,7 @@ const ImageBox = (props) => {
 			}
 		);
 		setComments(tempComment);
-		console.log(props.image.id)
+		setNumComment(numComment + 1)
 		fetch(props.usedApi+'/picture/comment', {
       method: 'POST',
       headers: {
@@ -145,6 +145,9 @@ const ImageBox = (props) => {
 				<IconButton aria-label="like" style={liked ? {color: 'red'} : {color: 'black'}} onClick={updateLike}>
 					<FavoriteIcon />
 				</IconButton>
+				<Typography variant="h6">
+					{numComment}
+				</Typography>
 				<IconButton aria-label="comment" onClick={handleClickOpen} disabled={props.mock}>
 					<CommentIcon />
 				</IconButton>
