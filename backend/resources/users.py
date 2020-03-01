@@ -36,6 +36,7 @@ class FeedAPI(Resource):
         for i in range(len(pictures)):
             pic_id = pictures[i]['_id']['$oid']
             del pictures[i]['_id']
+            del pictures[i]['date']
             pictures[i]['id'] = pic_id
             for j in range(len(pictures[i]['comments'])):
                 pictures[i]['comments'][j] = json.loads(Comment.objects(id=pictures[i]['comments'][j]['$oid']).first().to_json())
@@ -115,6 +116,9 @@ class FollowUserApi(Resource):
             if f == new_follower:
                 return {'message': 'User {} is already following {}'.format(current_user.username, new_follower.username)}, 200
 
+        for pic in new_follower.pictures:
+            User.objects(id=user_id).update_one(push__image_queue=pic)
+
         User.objects(id=user_id).update_one(push__following=new_follower)
         User.objects(username=body.get('follow')).update_one(push__followers=current_user)
         current_user.update(nb_following=current_user.nb_following + 1)
@@ -157,6 +161,9 @@ class UnfollowUserApi(Resource):
         if not following:
             return {'error': 'User cannot unfollow a user that he does not follow'}, 401
 
+        for pic in new_follower.pictures:
+            User.objects(id=user_id).update_one(pull__image_queue=pic)
+
         User.objects(id=user_id).update_one(pull__following=new_follower)
         User.objects(username=body.get('unfollow')).update_one(pull__followers=current_user)
         current_user.update(nb_following=current_user.nb_following - 1)
@@ -192,6 +199,8 @@ class SearchUserAPI(Resource):
             del u['following']
             del u['nb_followers']
             del u['nb_following']
+            del u['dates']
+            del u['nb_login']
             all_users[c] = u
             c += 1
         return Response(json.dumps(all_users), mimetype="application/json", status=200)
@@ -216,8 +225,10 @@ class UserInfoAPI(Resource):
 
         del user_info['password']
         del user_info['image_queue']
-        for pic in range(len(user_info['pictures'])):
-            user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
+        del user_info['_id']
+        del user_info['nb_login']
+        del user_info['dates']
+        del user_info['following']
 
         user_info['already_follow'] = False
 
@@ -225,6 +236,18 @@ class UserInfoAPI(Resource):
             if user['$oid'] == user_id:
                 user_info['already_follow'] = True
                 break
+        del user_info['followers']
+
+        for pic in range(len(user_info['pictures'])):
+            user_info['pictures'][pic] = json.loads(Picture.objects(id=user_info['pictures'][pic]['$oid']).first().to_json())
+            user_info['pictures'][pic]['id'] = user_info['pictures'][pic]['_id']['$oid']
+            del user_info['pictures'][pic]['_id']
+            del user_info['pictures'][pic]['date']
+            del user_info['pictures'][pic]['owner']
+            for com in range(len(user_info['pictures'][pic]['comments'])):
+                user_info['pictures'][pic]['comments'][com] = json.loads(Comment.objects(id=user_info['pictures'][pic]['comments'][com]['$oid']).first().to_json())
+                del user_info['pictures'][pic]['comments'][com]['_id']
+        user_info['pictures'] = user_info['pictures'][::-1]
 
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 

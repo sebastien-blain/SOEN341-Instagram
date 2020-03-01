@@ -27,51 +27,81 @@ Possible return message:
 
 ```
 {
-    "_id": {
-        "$oid": "5e43132fe3fc7eea4a59b5a4"
-    },
-    "username": "Arianne",
+    "username": "Sebastien",
+    "bio": "Welcome to mypanda space!!",
+    "nb_pictures": 5,
     "pictures": [
         {
-            "_id": {
-                "$oid": "5e431352e3fc7eea4a59b5a5"
-            },
-            "date": {
-                "$date": 1581436162806
-            },
-            "owner": "Arianne",
-            "user": "Arianne",
-            "link": "picture 1",
-            "message": "Awesome",
+            "owner": "Sebastien",
+            "user": "Sebastien",
+            "link": "www.panda.space",
+            "message": "Yep this is me",
             "nb_likes": 0,
-            "nb_comments": 0,
-            "comments": []
+            "nb_comments": 4,
+            "comments": [
+                {
+                    "user": "1",
+                    "message": "This is an awesome picture"
+                },
+                {
+                    "user": "1",
+                    "message": "Damm son"
+                },
+                {
+                    "user": "Sebastien",
+                    "message": "THis is so cool"
+                },
+                {
+                    "user": "Alexia",
+                    "message": "THis is so cool"
+                }
+            ],
+            "id": "5e5b0170e7105f841b06a142"
         },
         {
-            "_id": {
-                "$oid": "5e43136de3fc7eea4a59b5a6"
-            },
-            "date": {
-                "$date": 1581436189333
-            },
-            "owner": "Arianne",
-            "user": "Arianne",
-            "link": "New pic",
-            "message": "Super duper good pic",
+            "owner": "Sebastien",
+            "user": "Sebastien",
+            "link": "www.panda.space",
+            "message": "Super duper good pic ",
             "nb_likes": 0,
             "nb_comments": 0,
-            "comments": []
-        }
-    ],
-    "nb_followers": 0,
-    "followers": [],
-    "nb_following": 1,
-    "following": [
+            "comments": [],
+            "id": "5e5b01090088ee88755f2daf"
+        },
         {
-            "$oid": "5e431326e3fc7eea4a59b5a3"
+            "owner": "Sebastien",
+            "user": "Sebastien",
+            "link": "www.panda.space",
+            "message": "This is my third ",
+            "nb_likes": 0,
+            "nb_comments": 0,
+            "comments": [],
+            "id": "5e5b01010088ee88755f2dae"
+        },
+        {
+            "owner": "Sebastien",
+            "user": "Sebastien",
+            "link": "www.panda.space",
+            "message": "This is my 2nd picture",
+            "nb_likes": 0,
+            "nb_comments": 0,
+            "comments": [],
+            "id": "5e5b00c60088ee88755f2dad"
+        },
+        {
+            "owner": "Sebastien",
+            "user": "Sebastien",
+            "link": "www.panda.space",
+            "message": "This is my 1st picture",
+            "nb_likes": 0,
+            "nb_comments": 0,
+            "comments": [],
+            "id": "5e5b00be0088ee88755f2dac"
         }
     ],
-    "already_follow": false
+    "nb_followers": 1,
+    "nb_following": 1,
+    "already_follow": true
 }, 200
 
 ```
