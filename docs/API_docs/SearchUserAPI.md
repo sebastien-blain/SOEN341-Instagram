@@ -16,20 +16,26 @@ Possible return message:
 }, 401
 ```
 
-**2. Picture is added to database and to image queue of followers:**
+**2. List of users:**
 ```
 [
     {
         "_id": {
-            "$oid": "5e40bfa170fa2346c2eada8a"
+            "$oid": "5e5b000fd017f8ca30a115f2"
         },
-        "username": "David"
+        "username": "Sebastien",
+        "bio": "Welcome to mypanda space!!",
+        "nb_pictures": 5,
+        "already_follow": true
     },
     {
         "_id": {
-            "$oid": "5e40bfa670fa2346c2eada8b"
+            "$oid": "5e5b002fd017f8ca30a115f4"
         },
-        "username": "Phiong"
+        "username": "Phong",
+        "bio": "Welcome to mypanda space!!",
+        "nb_pictures": 0,
+        "already_follow": false
     }
 ], 200
 ```
