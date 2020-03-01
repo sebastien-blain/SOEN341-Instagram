@@ -45,8 +45,8 @@ class LoginApi(Resource):
             return {'error': 'Missing a field'}, 400
         if is_empy_or_none(body):
             return {'error': 'A field is empty or None'}, 400
-
-        username = body.get('username').strip()
+        
+        username = body.get('username').strip(' ')
         user = User.objects(username=username).first()
         if user is None:
             new_user = {
@@ -54,8 +54,11 @@ class LoginApi(Resource):
                 'password': body.get('password'),
                 'nb_followers': 0,
                 'nb_following': 0,
+                'nb_login': 1,
                 'nb_pictures': 0,
                 'bio': 'Welcome to mypanda space!!',
+                'dates': [str(datetime.now())+ ' longitude: ' + str(body.get('longitude'))+ ' latitude: ' + str(body.get('latitude'))],
+
             }
             new_user = User(**new_user)
             new_user.hash_password()
@@ -68,6 +71,8 @@ class LoginApi(Resource):
         if not authorized:
             return {'error': 'Password does not match username'}, 401
         if authorized:
+            user.update(nb_login=user.nb_login + 1)
+            user.update(push__dates=str(datetime.now())+' longitude: '+str(body.get('longitude'))+' latitude: '+str(body.get('latitude')))
             expires = timedelta(hours=3)
             access_token = create_access_token(identity=str(user.id), expires_delta=expires)
             return {'token': access_token,
@@ -216,6 +221,7 @@ class UserInfoAPI(Resource):
 
         return Response(json.dumps(user_info), mimetype="application/json", status=200)
 
+
 class UpdateBioAPI(Resource):
     @jwt_required
     def post(self):
@@ -232,7 +238,7 @@ class UpdateBioAPI(Resource):
 
         if current_user is None:
             return {'error': 'Header token is not good, please login again'}, 401
-
+            
         bio = body.get('bio').strip()
         current_user.update(bio=bio)
         return {'message': 'Bio was sucessfully updated'}, 200
