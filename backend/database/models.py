@@ -25,9 +25,8 @@ class User(db.Document):
 
 
 class Comment(db.Document):
-    user_id = db.StringField()
+    user = db.StringField()
     message = db.StringField()
-    added_picture = db.ReferenceField('Picture')
 
 
 class Picture(db.Document):

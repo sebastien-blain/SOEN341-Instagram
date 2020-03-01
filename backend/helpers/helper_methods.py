@@ -6,6 +6,7 @@ def fields_are_in(dicts, fields):
 
 
 def is_empy_or_none(dicts):
+    print(dicts)
     for i in dicts:
         if dicts[i] is None or dicts[i] == '':
             return True

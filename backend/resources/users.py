@@ -1,6 +1,6 @@
 from flask import Response, request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
-from database.models import User, Picture
+from database.models import User, Picture, Comment
 from flask_restful import Resource
 from helpers.helper_methods import *
 from datetime import *
@@ -32,7 +32,14 @@ class FeedAPI(Resource):
             return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
         pictures = [json.loads(i.to_json()) for i in pictures]
-        pictures.sort(key=lambda x: x['date']['$date'])
+        pictures = pictures[::-1]
+        for i in range(len(pictures)):
+            pic_id = pictures[i]['_id']['$oid']
+            del pictures[i]['_id']
+            pictures[i]['id'] = pic_id
+            for j in range(len(pictures[i]['comments'])):
+                pictures[i]['comments'][j] = json.loads(Comment.objects(id=pictures[i]['comments'][j]['$oid']).first().to_json())
+                del pictures[i]['comments'][j]['_id']
 
         return Response(json.dumps(pictures), mimetype="application/json", status=200)
 
