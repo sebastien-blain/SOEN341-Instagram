@@ -306,6 +306,7 @@ export default function MiniDrawer() {
               />
               <Route path={'/'+username} component={() =>
                 <UserPage 
+                  currentUser={username}
                   user={username}
                   token={token}
                   usedApi={usedApi}

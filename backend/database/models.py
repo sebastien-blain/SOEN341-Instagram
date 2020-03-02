@@ -39,6 +39,7 @@ class Picture(db.Document):
     nb_comments = db.IntField()
     comments = db.ListField(db.ReferenceField(
         'Comment', reverse_delete_rule=db.PULL))
+    liked_by = db.ListField(db.StringField())
 
 
 Picture.register_delete_rule(Comment, 'added_picture', db.CASCADE)

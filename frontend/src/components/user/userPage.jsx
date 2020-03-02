@@ -121,9 +121,7 @@ export default class UserPage extends Component {
   }
 
   submitBio = (e) => {
-    console.log(e.target.value)
     const text = e.target.value
-
     fetch(this.props.usedApi+'/user/update/bio', {
       method: 'POST',
       headers: {
@@ -135,7 +133,6 @@ export default class UserPage extends Component {
       }),
     })
     .then((res) => {
-      console.log(res.json())
       this.setState(() => {
         return {
           bio: text

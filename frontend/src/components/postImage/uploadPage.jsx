@@ -66,6 +66,7 @@ export default function VerticalLinearStepper(props) {
         link: selectedFile,
         like: true,
         nb_likes: 10,
+        liked_by: [],
         message: description,
         comments: [
           {
