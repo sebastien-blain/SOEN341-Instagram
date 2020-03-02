@@ -77,7 +77,7 @@ class PostCommentAPI(Resource):
 
         return {'message': 'Comment successfully added to picture'}, 200
 
-class PostLikeAPI(Resource):
+class UpdateLikeAPI(Resource):
     @jwt_required
     def post(self):
         body = request.get_json()
@@ -102,9 +102,9 @@ class PostLikeAPI(Resource):
         if current_user.username in picture.liked_by:
             Picture.objects(id=body.get('picture_id')).update_one(pull__liked_by=current_user.username)
             Picture.objects(id=body.get('picture_id')).update_one(nb_likes=picture.nb_likes - 1)
-            return {'message': 'Comment successfully disliked picture'}, 200
+            return {'message': 'Successfully disliked picture'}, 200
 
         Picture.objects(id=body.get('picture_id')).update_one(push__liked_by=current_user.username)
         Picture.objects(id=body.get('picture_id')).update_one(nb_likes=picture.nb_likes + 1)
-        return {'message': 'Comment successfully liked picture'}, 200
+        return {'message': 'Successfully liked picture'}, 200
 
