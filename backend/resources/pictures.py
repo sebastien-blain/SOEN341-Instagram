@@ -77,3 +77,34 @@ class PostCommentAPI(Resource):
 
         return {'message': 'Comment successfully added to picture'}, 200
 
+class PostLikeAPI(Resource):
+    @jwt_required
+    def post(self):
+        body = request.get_json()
+        fields = ['picture_id']
+        if not fields_are_in(body, fields):
+            return {'error': 'Missing a field'}, 400
+        if is_empy_or_none(body):
+            return {'error': 'A field is empty or None'}, 400
+
+        # Get current requesting user
+        user_id = get_jwt_identity()
+        current_user = User.objects(id=user_id).first()
+
+        if current_user is None:
+            return {'error': 'Header token is not good, please login again'}, 401
+
+        picture = Picture.objects(id=body.get('picture_id')).first()
+
+        if picture is None:
+            return {'error': 'Picture id does not exist in database'}, 401
+
+        if current_user.username in picture.liked_by:
+            Picture.objects(id=body.get('picture_id')).update_one(pull__liked_by=current_user.username)
+            Picture.objects(id=body.get('picture_id')).update_one(nb_likes=picture.nb_likes - 1)
+            return {'message': 'Comment successfully disliked picture'}, 200
+
+        Picture.objects(id=body.get('picture_id')).update_one(push__liked_by=current_user.username)
+        Picture.objects(id=body.get('picture_id')).update_one(nb_likes=picture.nb_likes + 1)
+        return {'message': 'Comment successfully liked picture'}, 200
+

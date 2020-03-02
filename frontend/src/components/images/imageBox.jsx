@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 const ImageBox = (props) => {
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
-	const [liked, setLiked] = React.useState(false);
+	const [liked, setLiked] = React.useState(props.image.liked_by.includes(props.currentUser));
 	const [open, setOpen] = React.useState(false);
 	const [comments, setComments] = React.useState(props.image.comments);
 	const [currentComment, setCurrentComment] = React.useState(undefined);
@@ -83,6 +83,26 @@ const ImageBox = (props) => {
 			setNumLike(numLike + 1);
 		}
 		setLiked(!liked);
+
+		if(!props.mock){
+			fetch(props.usedApi+'/picture/like', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer '+props.token
+				},
+				body: JSON.stringify({
+					picture_id: props.image.id,
+				}),
+			})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				console.log(responseJson);
+			})
+			.catch((e) =>  {
+				console.log(e)
+			})
+		}
 	}
 
 	const updateComment = (e) => {
