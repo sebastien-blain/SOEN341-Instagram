@@ -37,6 +37,26 @@ export default class Homepage extends Component {
     })
   }
 
+  reloadFeed = () => {
+    fetch(this.props.usedApi+'/feed', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+this.props.token
+      }
+    })
+    .then((res) => res.json())
+    .then((resJson) => {
+      this.setState({images: resJson});
+    })
+    .catch((e) =>  {
+      console.log(e);
+      this.setState(() => {
+        return({images: []});
+      });
+    })
+  }
+
   render() {
     return(
       <div>
