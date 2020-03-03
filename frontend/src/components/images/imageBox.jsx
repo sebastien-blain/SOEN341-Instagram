@@ -97,7 +97,7 @@ const ImageBox = (props) => {
 			})
 			.then((response) => response.json())
 			.then((responseJson) => {
-				(responseJson);
+				console.log(responseJson);
 			})
 			.catch((e) =>  {
 				console.log(e)
