@@ -17,7 +17,7 @@ constructor(props) {
 
   render() {
     return (
-      <Typography className={this.state.classes.text}>{this.props.user}: {this.props.comment}</Typography>
+      <Typography className={this.state.classes.text}><strong>{this.props.user}:</strong> {this.props.comment}</Typography>
     );
   }
   
