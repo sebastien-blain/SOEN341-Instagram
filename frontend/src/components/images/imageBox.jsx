@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 		transform:'translateX(-50%)'
 	},
 	text: {
-		fontSize: '11px',
+		fontSize: '15px',
 	},
 	subtext: {
 		fontSize: '10px',
@@ -153,7 +153,7 @@ const ImageBox = (props) => {
 			/>
 
 			<CardContent>
-				<Typography className={classes.text} variant="body2" color="textSecondary" component="p">
+				<Typography className={classes.text} variant="body2" color="textPrimary" component="p">
 					{props.image.message}
 				</Typography>
 			</CardContent>
@@ -168,7 +168,7 @@ const ImageBox = (props) => {
 				<Typography variant="h6">
 					{numComment}
 				</Typography>
-				<IconButton aria-label="comment" onClick={handleClickOpen} disabled={props.mock}>
+				<IconButton aria-label="comment" style={{color: 'black'}} onClick={handleClickOpen} disabled={props.mock}>
 					<CommentIcon />
 				</IconButton>
 

@@ -75,15 +75,14 @@ export default function VerticalLinearStepper(props) {
 
   const updateMock = () => {
     toDataURL(selectedFile, function(dataUrl) {
-      console.log('RESULT:', dataUrl);
-      setSelectedFile(dataUrl)
+      setSelectedFile(dataUrl);
     })
     setMockImage(
       {
         user: props.currentUser,
         link: selectedFile,
         like: true,
-        nb_likes: 10,
+        nb_likes: 0,
         liked_by: [],
         message: description,
         comments: [
