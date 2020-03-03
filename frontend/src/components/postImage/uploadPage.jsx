@@ -74,7 +74,6 @@ export default function VerticalLinearStepper(props) {
   }
 
   const updateMock = () => {
-    console.log(selectedFile);
     toDataURL(selectedFile, function(dataUrl) {
       console.log('RESULT:', dataUrl);
       setSelectedFile(dataUrl)
