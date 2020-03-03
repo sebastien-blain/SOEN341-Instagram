@@ -35,6 +35,7 @@ class PostPictureAPI(Resource):
         picture = Picture(**picture)
         picture.save()
 
+        User.objects(id=user_id).update_one(push__image_queue=picture)
         User.objects(id=user_id).update_one(push__pictures=picture)
         User.objects(id=user_id).update_one(nb_pictures=current_user.nb_pictures + 1)
 
@@ -76,6 +77,7 @@ class PostCommentAPI(Resource):
         Picture.objects(id=body.get('picture_id')).update_one(nb_comments=picture.nb_comments + 1)
 
         return {'message': 'Comment successfully added to picture'}, 200
+
 
 class UpdateLikeAPI(Resource):
     @jwt_required
