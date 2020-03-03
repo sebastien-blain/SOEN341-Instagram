@@ -59,10 +59,29 @@ export default function VerticalLinearStepper(props) {
     setDescription(event.target.value);
   }
 
+  function toDataURL(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        callback(reader.result);
+      }
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+
   const updateMock = () => {
+    console.log(selectedFile);
+    toDataURL(selectedFile, function(dataUrl) {
+      console.log('RESULT:', dataUrl);
+      setSelectedFile(dataUrl)
+    })
     setMockImage(
       {
-        owner: props.currentUser,
+        user: props.currentUser,
         link: selectedFile,
         like: true,
         nb_likes: 10,
@@ -84,9 +103,6 @@ export default function VerticalLinearStepper(props) {
   }
 
   const uploadImages = () => {
-
-    //Missing aws link here
-
     fetch(props.usedApi+'/post', {
       method: 'POST',
       headers: {
@@ -94,7 +110,7 @@ export default function VerticalLinearStepper(props) {
         'Authorization': 'Bearer '+props.token
       },
       body: JSON.stringify({
-        link: "https://i.pinimg.com/originals/cb/33/49/cb3349b86ca661ca61ae9a36d88d70d4.png",
+        link: selectedFile,
         message: description,
       }),
     })
