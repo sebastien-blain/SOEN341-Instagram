@@ -12,7 +12,6 @@ export default class ImageListPage extends Component {
     return (
       <div>
         {this.props.images.map( (image, index) => {
-          console.log(image);
           return (
             <div style={{margin:'30px', position:'relative'}} key={index}>
               <ImageBox image={image} currentUser={this.props.currentUser} usedApi={this.props.usedApi} token={this.props.token}/>
