@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -120,6 +121,7 @@ export default function MiniDrawer() {
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
   const [bio, setBio] = React.useState(undefined);
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     const location = window.navigator && window.navigator.geolocation;
@@ -149,6 +151,7 @@ export default function MiniDrawer() {
   }
 
   const login = () => {
+    setLoading(true);
     fetch(usedApi+'/login', {
       method: 'POST',
       headers: {
@@ -163,6 +166,7 @@ export default function MiniDrawer() {
     })
     .then((response) => response.json())
     .then((responseJson) => {
+      setLoading(false);
       setToken(responseJson.token);
       if(responseJson.token !== undefined) {
         setLoggedin(true);
@@ -330,6 +334,15 @@ export default function MiniDrawer() {
         <Button variant="contained" color="primary" onClick={login} disabled={!(username && password)}>
           Login / Register
         </Button>
+        {loading ?
+          <div>
+          <br/>
+          <br/>
+          <CircularProgress/>
+          </div>
+          :
+          <div></div>
+        }
       </form>
     );
   }

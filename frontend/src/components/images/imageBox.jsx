@@ -143,7 +143,7 @@ const ImageBox = (props) => {
 	return (
 		<Card className={classes.root}>
 			<Typography variant="h5" style={{padding: '10px 20px 10px 20px'}}>
-				{props.image.owner}
+				{props.image.user}
 			</Typography>
 
 			<CardMedia
