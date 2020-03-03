@@ -22,13 +22,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
-
-import ImageListPage from './images/ImageListPage';
-
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SearchPage from './search/searchPage';
 import VerticalLinearStepper from './postImage/uploadPage';
 import UserPage from './user/userPage';
+import HomePage from './home/homepage';
 
 import config from '../config';
 
@@ -122,7 +120,6 @@ export default function MiniDrawer() {
   const [longitude, setLongitude] = React.useState(undefined);
   const [latitude, setLatitude] = React.useState(undefined);
   const [bio, setBio] = React.useState(undefined);
-  const [feed, setFeed] = React.useState([]);
 
   useEffect(() => {
     const location = window.navigator && window.navigator.geolocation;
@@ -170,21 +167,6 @@ export default function MiniDrawer() {
       if(responseJson.token !== undefined) {
         setLoggedin(true);
         setBio(responseJson.bio);
-        fetch(usedApi+'/feed', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer '+responseJson.token
-          }
-        })
-        .then((response2) => response2.json())
-        .then((responseJson2) => {
-          setFeed(responseJson2);
-        })
-        .catch((e) =>  {
-          console.log(e);
-          setFeed([])
-        })
       }
       else {
         setInvalidPass(true);
@@ -285,9 +267,7 @@ export default function MiniDrawer() {
         <div className={classes.toolbar} />
             <Switch>
               <Route path='/' exact component={() =>
-                <ImageListPage 
-                  isFeed={true}
-                  images={feed}
+                <HomePage 
                   currentUser={username}
                   usedApi={usedApi}
                   token={token}/>}
