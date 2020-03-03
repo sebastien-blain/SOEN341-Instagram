@@ -47,7 +47,6 @@ export default class Homepage extends Component {
     })
     .then((res) => res.json())
     .then((resJson) => {
-      console.log(resJson)
       this.setState({images: resJson});
     })
     .catch((e) =>  {
