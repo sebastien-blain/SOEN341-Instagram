@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ImageListPage from '../images/ImageListPage';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import SyncIcon from '@material-ui/icons/Sync';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,10 +15,11 @@ export default class Homepage extends Component {
   constructor(props) {
     super(props);
     // Don't call this.setState() here!
-    this.state = { classes: useStyles, images: []};
+    this.state = { classes: useStyles, images: [], loading: false};
   }
 
   componentDidMount() {
+    this.setState({loading: true});
     fetch(this.props.usedApi+'/feed', {
       method: 'GET',
       headers: {
@@ -28,6 +30,7 @@ export default class Homepage extends Component {
     .then((res) => res.json())
     .then((resJson) => {
       this.setState({images: resJson});
+      this.setState({loading: false});
     })
     .catch((e) =>  {
       console.log(e);
@@ -38,6 +41,7 @@ export default class Homepage extends Component {
   }
 
   reloadFeed = () => {
+    this.setState({loading: true});
     fetch(this.props.usedApi+'/feed', {
       method: 'GET',
       headers: {
@@ -48,6 +52,7 @@ export default class Homepage extends Component {
     .then((res) => res.json())
     .then((resJson) => {
       this.setState({images: resJson});
+      this.setState({loading: false});
     })
     .catch((e) =>  {
       console.log(e);
@@ -64,7 +69,7 @@ export default class Homepage extends Component {
           variant="contained"
           color="primary"
           className={this.state.classes.button}
-          endIcon={<SyncIcon />}
+          endIcon={this.state.loading ? <CircularProgress size="20px" color="secondary"/> : <SyncIcon />}
           onClick={this.reloadFeed}
         >
           Reload
