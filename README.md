@@ -12,7 +12,7 @@ The goal of the project is to develop a simplified version of the Instagram appl
 3. Leave comments to a posted picture
 
 ## Additional features
-1. Cannot repost a picture without crediting the original post
+1. The ability to search other users
 
 ## Technologies
 * React
