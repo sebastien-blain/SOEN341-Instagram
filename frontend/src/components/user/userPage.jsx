@@ -62,6 +62,17 @@ export default class UserPage extends Component {
         });
       });
     })
+    .catch((e) => {
+      this.setState(() => {
+        return ({
+          nbFollowers: 0,
+          nbFollowing: 0,
+          nbPost: 0,
+          bio: 'Cool Bio',
+          images: []
+        });
+      })
+    }) 
   }
 
   follow = () => {

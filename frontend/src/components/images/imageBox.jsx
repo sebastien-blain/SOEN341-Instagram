@@ -149,7 +149,7 @@ const ImageBox = (props) => {
 			<CardMedia
 				className={classes.media}
 				image={props.image.link}
-				title=""
+				title="image"
 			/>
 
 			<CardContent>

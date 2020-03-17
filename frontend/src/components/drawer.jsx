@@ -130,7 +130,7 @@ export default function MiniDrawer() {
       location.getCurrentPosition( (position) => {setLatitude(position.coords.latitude);});
     }
     catch(e) {
-      console.log('failed')
+      console.log('failed to fetch location');
     }
   });
 
