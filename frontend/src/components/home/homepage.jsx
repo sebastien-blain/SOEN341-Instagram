@@ -63,7 +63,7 @@ export default class Homepage extends Component {
   }
 
   render() {
-    return(
+    return (
       <div>
         <Button
           variant="contained"
