@@ -2,6 +2,9 @@ import React from 'react';
 import MiniDrawer from './components/drawer';
 import Homepage from './components/home/homepage';
 import ImageBox from './components/images/imageBox';
+import VerticalLinearStepper from './components/postImage/uploadPage';
+import SearchPage from './components/search/searchPage';
+import UserPage from './components/user/userPage';
 
 export function Login() {
   return (
@@ -15,6 +18,25 @@ export function Home() {
   );
 }
 
+export function Upload() {
+  return (
+    <VerticalLinearStepper />
+  );
+}
+
+export function Search() {
+  return (
+    <SearchPage />
+  );
+}
+
+export function User() {
+  return (
+    <UserPage />
+  );
+}
+
+
 const mockImage = {
   liked_by : [],
   comments : [],
@@ -26,6 +48,6 @@ const mockImage = {
 }
 export function Image() {
   return (
-    <ImageBox image={ mockImage } mock={ true }/>
+    <ImageBox image={ mockImage }/>
   );
 }
