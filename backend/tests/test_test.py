@@ -105,5 +105,17 @@ class TestStringMethods(unittest.TestCase):
         response = self.search(token)
         self.assertEqual(response.status_code, 200)
 
+    def feed(self, token):
+        return self.app.get(
+            '/feed',
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
+
+    def test_feed(self):
+        res = self.login('Sebas2', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.feed(token)
+        self.assertEqual(response.status_code, 200)
+        
 if __name__ == '__main__':
     unittest.main()
