@@ -85,7 +85,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'User Phong2 is already following unk', response.data)
 
-def test_follow_correct(self):
+    def test_follow_correct(self):
         self.login('Sebas', 'Hello')
         res = self.login('Phong3', 'Hello')
         token = json.loads(res.data)['token']
@@ -93,6 +93,17 @@ def test_follow_correct(self):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'User Phong3 is now following Sebas', response.data)
 
+    def search(self, token):
+        return self.app.get(
+            '/search',
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
+    
+    def test_search(self):
+        res = self.login('Sebas1', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.search(token)
+        self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()
