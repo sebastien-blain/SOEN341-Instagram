@@ -147,5 +147,24 @@ class TestStringMethods(unittest.TestCase):
         response = self.feed(token)
         self.assertEqual(response.status_code, 200)
 
+    def test_correct_user_info(self):
+        res = self.login('Sebas2', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.app.get(
+            '/user/Sebas2',
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
+        self.assertEqual(response.status_code, 200)
+
+    def test_incorrect_user_info(self):
+        res = self.login('Sebas2', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.app.get(
+            '/user/Sebas10000',
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
+        self.assertEqual(response.status_code, 401)
+
+
 if __name__ == '__main__':
     unittest.main()
