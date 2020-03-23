@@ -61,6 +61,13 @@ class TestStringMethods(unittest.TestCase):
             data=json.dumps(dict(follow=username)),
             headers={"Authorization":"Bearer {}".format(token)},
             mimetype='application/json')
+
+    def unfollow(self, username, token):
+        return self.app.post(
+            '/unfollow',
+            data=json.dumps(dict(unfollow=username)),
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
     
     def test_follow_unknown_user(self):
         res = self.login('Phong', 'Hello')
@@ -93,6 +100,29 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'User Phong3 is now following Sebas', response.data)
 
+    def test_unfollow_unknown_user(self):
+        res = self.login('Sebas3', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.unfollow('Unknown', token)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'User Unknown does not exist', response.data)
+
+    def test_unfollow_own_user(self):
+        res = self.login('Sebas4', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.unfollow('Sebas4', token)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'User cannot unfollow itself', response.data)
+
+    def test_unfollow_correct(self):
+        self.login('Sebas5', 'Hello')
+        res = self.login('Sebas6', 'Hello')
+        token = json.loads(res.data)['token']
+        self.follow('Sebas5', token)
+        response = self.unfollow('Sebas5', token)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'User Sebas6 has unfollow Sebas5', response.data)
+    
     def search(self, token):
         return self.app.get(
             '/search',
@@ -116,6 +146,6 @@ class TestStringMethods(unittest.TestCase):
         token = json.loads(res.data)['token']
         response = self.feed(token)
         self.assertEqual(response.status_code, 200)
-        
+
 if __name__ == '__main__':
     unittest.main()
