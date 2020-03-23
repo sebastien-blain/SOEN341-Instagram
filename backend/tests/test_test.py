@@ -55,6 +55,44 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(response.status_code, 401)
         self.assertIn(b'Password does not match username', response.data)
 
+    def follow(self, username, token):
+        return self.app.post(
+            '/follow',
+            data=json.dumps(dict(follow=username)),
+            headers={"Authorization":"Bearer {}".format(token)},
+            mimetype='application/json')
+    
+    def test_follow_unknown_user(self):
+        res = self.login('Phong', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.follow('Unknown', token)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'User Unknown does not exist', response.data)
+
+    def test_follow_own_user(self):
+        res = self.login('Phong1', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.follow('Phong1', token)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'User cannot follow itself', response.data)
+
+    def test_follow_already_followed_user(self):
+        self.login('unk', 'Hello')
+        res = self.login('Phong2', 'Hello')
+        token = json.loads(res.data)['token']
+        self.follow('unk', token)
+        response = self.follow('unk', token)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'User Phong2 is already following unk', response.data)
+
+def test_follow_correct(self):
+        self.login('Sebas', 'Hello')
+        res = self.login('Phong3', 'Hello')
+        token = json.loads(res.data)['token']
+        response = self.follow('Sebas', token)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'User Phong3 is now following Sebas', response.data)
+
 
 if __name__ == '__main__':
     unittest.main()
