@@ -38,6 +38,22 @@ class TestStringMethods(unittest.TestCase):
         response = self.app.get('/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
+    def login(self, username, password):
+        return self.app.post(
+            '/login',
+            data=json.dumps(dict(username=username, password=password)),
+            mimetype='application/json')
+    
+    def test_correct_login(self):
+        response = self.login('Sebastien', 'Password')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'token', response.data)
+
+    def test_incorrect_login(self):
+        self.login('Alexia', 'Password')
+        response = self.login('Alexia', 'BadPassword')
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(b'Password does not match username', response.data)
 
 
 if __name__ == '__main__':
