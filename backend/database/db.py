@@ -13,7 +13,7 @@ def delete_db():
         mypanda[collection_name].remove()
 
 
-#delete_db()
+delete_db()
 db = MongoEngine()
 
 
