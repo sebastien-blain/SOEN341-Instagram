@@ -29,7 +29,7 @@ The goal of the project is to develop a simplified version of the Instagram appl
 * Heroku (Backend)
 
 ## Team Members
-* Sébastien Blain-Nadeau - https://github.com/Sebastien0730
+* Sébastien Blain-Nadeau - https://github.com/sebastien-blain
 * Phong Le - https://github.com/phong1233
 * David Thaï - https://github.com/davidthai0387
 * Cheikh Diagne - https://github.com/cheikhd97
