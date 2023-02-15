@@ -7,7 +7,7 @@ pymongo==3.10.1
 requests==2.22.0
 WTForms==2.2.1
 Coverage==5.0.3
-Werkzeug==0.15.6
+Werkzeug==2.2.3
 flask-bcrypt==0.7.1
 flask-jwt-extended==3.24.1
 flask-cors==3.0.9
